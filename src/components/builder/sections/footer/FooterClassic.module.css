@@ -1,0 +1,151 @@
+.footer {
+  position: relative;
+  overflow: hidden;
+  padding: 2rem 0;
+}
+
+.footerBlock {
+  width: 100%;
+  padding: 2.5rem 3rem 2rem;
+  border-radius: 1rem;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  gap: 4rem;
+  margin-bottom: 3rem;
+}
+
+.brand {
+  max-width: 22rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.logoText {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.columns {
+  display: flex;
+  gap: 4rem;
+  flex-wrap: wrap;
+}
+
+@container (max-width: 1024px) {
+  .columns {
+    gap: 2.5rem;
+  }
+}
+
+.columns h4 {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.columns a {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+  font-weight: 300;
+}
+
+.columns a:hover {
+  opacity: 0.7;
+}
+
+.divider {
+  display: block;
+  height: 1px;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+}
+
+.socials {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.icons {
+  display: inline-flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.iconCircle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+}
+
+.iconCircle:hover {
+  opacity: 0.7;
+}
+
+@container (max-width: 724px) {
+  .top {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .columns {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .bottom {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .footerBlock {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@container (max-width: 430px) {
+  .footerBlock {
+    padding: 1.5rem 1rem;
+  }
+
+  .columns h4 {
+    font-size: 0.82rem;
+  }
+
+  .columns a {
+    font-size: 0.78rem;
+  }
+
+  .bottom {
+    font-size: 0.72rem;
+  }
+}

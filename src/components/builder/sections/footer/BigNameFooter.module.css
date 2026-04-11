@@ -1,0 +1,165 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+  padding: 3rem 0 0;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── Top row ── */
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.logoText {
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  font-size: 0.78rem;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 240px;
+}
+
+.navColumns {
+  display: flex;
+  gap: 3.5rem;
+  flex-wrap: wrap;
+}
+
+@container (max-width: 1024px) {
+  .navColumns {
+    gap: 2rem;
+  }
+}
+
+.navCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.colTitle {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  margin: 0 0 0.3rem;
+}
+
+.navLink {
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.navLink:hover {
+  opacity: 0.6;
+}
+
+/* ── Social icons ── */
+.socialRow {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 2.5rem;
+}
+
+.socialIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+
+.socialIcon:hover {
+  opacity: 0.5;
+}
+
+/* ── Fading giant brand name ── */
+.bigNameWrap {
+  width: 100%;
+  overflow: hidden;
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bigName {
+  display: block;
+  font-size: clamp(48px, 16cqi, 260px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  line-height: 0.9;
+  text-align: center;
+  width: 100%;
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+}
+
+.copyright {
+  font-size: 0.72rem;
+  margin-top: 0.75rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+@container (max-width: 724px) {
+  .footer {
+    padding: 2rem 0 0;
+  }
+
+  .top {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .navColumns {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .socialRow {
+    margin-top: 1.5rem;
+  }
+}
+
+@container (max-width: 430px) {
+  .footer {
+    padding: 1.5rem 0 0;
+  }
+
+  .logoText {
+    font-size: 0.95rem;
+  }
+
+  .tagline {
+    font-size: 0.72rem;
+  }
+
+  .navLink {
+    font-size: 0.72rem;
+  }
+
+  .copyright {
+    font-size: 0.65rem;
+  }
+}

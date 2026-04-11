@@ -1,0 +1,432 @@
+================================================================================
+  LUXE WEB BUILDER — FULL CONTEXT OVERVIEW
+  Last updated: March 30, 2026
+================================================================================
+
+WHAT IS IT?
+-----------
+A visual website builder built inside a Next.js app. Users configure colors,
+fonts, layout sections and content through a sidebar UI. The canvas shows a
+live preview. Users can then export a standalone Next.js project as a ZIP, or
+open a full preview window. It is NOT a drag-and-drop pixel editor — it is a
+structured section-based builder where each section is a pre-built React
+component with swappable design variants and editable text content.
+
+
+================================================================================
+  CORE DATA MODEL
+================================================================================
+
+All state lives in a single React Context: BuilderContext.tsx
+Accessed globally via the useBuilder() hook.
+
+-- GlobalStyles --
+{
+  colors: {
+    primary: string,       // main brand color (background/text depending on theme)
+    secondary: string,     // secondary backgrounds
+    paragraph: string,     // body text color
+    accent: string,        // CTA buttons, highlights
+  },
+  borderRadius: "sharp" | "soft" | "rounded",
+  buttonStyle:  "filled" | "outlined",
+  theme:        "light" | "dark",
+  fonts: {
+    heading: string,       // Google Font name
+    body:    string,       // Google Font name
+  },
+  showBadge:      boolean, // shows a "Made with Luxe" badge
+  activePresetName?: string  // tracks which preset is active for theme switching
+}
+
+-- PageSections --
+Record<pageNumber (1-5), SectionItem[]>
+
+Each SectionItem:
+{
+  id:            string,   // Unique ID e.g. "nav", "hero", "features-1711234567"
+  title:         string,   // Display name e.g. "Feature Section 2"
+  isVisible:     boolean,  // Toggle — hidden sections stay in list but off canvas
+  isLocked?:     boolean,  // nav, hero, footer are locked (no delete/reorder)
+  designVariant?: string,  // Active design e.g. "hero-b", "cta-immersive"
+}
+
+-- SectionContent --
+Record<sectionId, Record<fieldKey, string>>
+Stores user-edited text content per section instance.
+
+-- activePage --       number (1–5), which page is being edited
+-- activeConfigId --   string | null, section selected for design/content editing
+-- scrollToSectionId-- string | null, triggers animated scroll on canvas
+
+
+================================================================================
+  FILE STRUCTURE MAP
+================================================================================
+
+src/app/web-builder/
+  page.tsx                     Entry route → renders BuilderLayout
+  preview/page.tsx             Preview route → renders PreviewPage
+
+src/components/builder/
+  context/
+    BuilderContext.tsx         ALL global state + useBuilder() hook
+
+  layout/
+    BuilderLayout.tsx          Main orchestrator (wraps everything in provider)
+    BuilderHeader.tsx          Top bar: Back, Dev Mode, Export, Preview
+    BuilderSidebar.tsx         Left 300px panel (4 accordion sections)
+    BuilderSecondarySidebar.tsx Right 280px panel (design/content/font picker)
+    BuilderCanvas.tsx          Scrollable/zoomable canvas that renders sections
+    BuilderBottomBar.tsx       Bottom toolbar (accordion toggles + zoom controls)
+    [*.css]                    Companion CSS files for each layout component
+
+  sidebar/
+    types.ts                   SectionItem, ToolSection type definitions
+    panels/
+      StartSection.tsx         Randomize + presets
+      SectionsSection.tsx      Drag-and-drop section list
+      GlobalStylesSection.tsx  Colors, fonts, radius, button style
+      ContentSection.tsx       List of visible sections to click into CMS edit
+    widgets/
+      colorUtils.ts            contrastText(), luminance inversion helpers
+
+  sections/
+    _shared/
+      index.ts                 Component registry: sectionId → variant → Component
+      contentSchemas.ts        CMS field definitions per design variant
+      presets.ts               6 named style presets
+      layout.module.css        .inner class (max-width 1200px, container-query aware)
+
+    nav/                       NavA, NavB
+    hero/                      HeroA, HeroB, HeroC
+    features/                  FeatureA–E (5 variants)
+    testimonials/              TestimonialsA–C (3 variants)
+    gallery/                   GalleryA–B (2 variants)
+    pricing/                   PricingA–C (3 variants)
+    faq/                       FAQA–C (3 variants)
+    cta/                       8 variants (bold, centered, flat, split,
+                               split-flipped, gradient, dark-banner, immersive)
+    footer/                    6 variants (classic, spinny, bigname,
+                               immersive, minimal, corporate)
+
+  export/
+    exportProject.ts           Client: POSTs to /api/export, downloads blob as ZIP
+
+  preview/
+    PreviewPage.tsx            Full-screen preview with device frames + controls
+
+src/app/api/export/
+  route.ts                     Server: reads source files, transforms imports,
+                               generates full standalone Next.js ZIP
+
+
+================================================================================
+  ARCHITECTURE LAYERS
+================================================================================
+
+1. ENTRY POINT
+   BuilderLayout.tsx wraps everything in <BuilderProvider>. It owns:
+   - activePage (which of 5 pages to edit)
+   - sidebarOpen / activeToolSection (which accordion is expanded)
+   - canvasScale (read-only reference passed to bottom bar display)
+   - devMode (responsive side-by-side view)
+   Canvas and sidebar refs for programmatic zoom/scroll control.
+
+2. CONTEXT & STATE (BuilderContext.tsx)
+   The provider holds globalStyles, pageSections, sectionContent, and transient
+   UI state (activeConfigId, scrollToSectionId). All setters exposed through
+   useBuilder(). Google Fonts are injected into <head> via useEffect whenever
+   fonts change. Initial state seeds page 1 with all 9 default sections.
+
+3. CANVAS (BuilderCanvas.tsx)
+   - Sections render at a fixed 1200px wide container centered in canvas.
+   - Container has container-type: inline-size so all @container queries in
+     section CSS work correctly at any zoom level.
+   - Pan: left-click drag or shift-scroll. Zoom: Ctrl+scroll (0.25×–3×) or
+     pinch. Touch supported.
+   - Hover: semi-transparent overlay with section label.
+   - Click (movement < 5px): sets activeConfigId, triggers scrollToSectionId,
+     auto-opens sidebar on mobile.
+   - Dev mode: renders Desktop (1920px) + Tablet (768px) + Mobile (375px)
+     side-by-side with labels. Same interactions apply.
+   - useMemo wraps section render tree to avoid re-renders during pan/zoom.
+   - Auto-fit zoom: 82% of container width / 1200, clamped 0.3–1.
+
+4. LEFT SIDEBAR (BuilderSidebar.tsx)
+   Four accordion sections toggled from the bottom bar:
+
+   [START]
+   - Style presets (6 named presets: Minimal, Apple, Elegant, Bold, Clean, Tech)
+   - Randomize button: shuffles all section designVariants randomly
+   - Theme toggle switches dark/light, inverts palette luminance
+
+   [SECTIONS]
+   - Ordered list of SectionItem[]. Nav/Hero/Footer are locked (show lock icon).
+   - Grip handle for draggable sections. Drop indicator shows insertion point.
+     Locked sections define no-insert zones.
+   - Per-section: eye icon (toggle visibility), trash icon (delete). Locked
+     sections show neither.
+   - "+" dropdown: re-enable hidden sections, or add Feature Section (max 3).
+     Feature sections get unique IDs like "features-{timestamp}".
+   - Search bar filters the section list display.
+
+   [GLOBAL STYLE]
+   - 4 color pickers (primary, secondary, paragraph, accent).
+   - Font pairing button: opens secondary sidebar in font-picker mode.
+   - Border radius: 3-way toggle (sharp / soft / rounded).
+   - Button style: 2-way toggle (filled / outlined).
+
+   [CONTENT]
+   - Lists visible sections by name.
+   - Clicking one sets activeConfigId = "content:sectionId", opening the
+     secondary sidebar in content-editor mode.
+   - AI icon present (unconnected UI placeholder).
+
+5. RIGHT SECONDARY SIDEBAR (BuilderSecondarySidebar.tsx)
+   Slides in from the right. Three modes based on activeConfigId:
+
+   MODE A — Design Picker (activeConfigId = plain sectionId)
+   - Shows all design variants for that section type as preview cards.
+   - Each card renders the actual React component scaled down (~960px → 120px).
+   - Selecting a variant updates designVariant on the SectionItem.
+
+   MODE B — Content Editor (activeConfigId = "content:{sectionId}")
+   - Pulls content schema from variantContentSchemas[designVariant].
+   - Renders form fields: text (input), textarea (3-row), list (comma-separated).
+   - Changes write directly into sectionContent[sectionId][fieldKey].
+
+   MODE C — Font Pairing (activeConfigId = "font-pairing")
+   - Lists 11 Google Fonts (8 sans-serif, 3 serif).
+   - Two columns: Heading and Body font. Each font shows a preview string.
+   - Active font highlighted in purple (#987ed2).
+
+6. BOTTOM BAR (BuilderBottomBar.tsx)
+   - 4 icon buttons toggle the 4 sidebar accordions.
+   - Zoom: out (−), percentage display, in (+), reset view.
+
+7. HEADER (BuilderHeader.tsx)
+   - Back arrow: router.back()
+   - Dev Mode toggle: side-by-side responsive preview in canvas
+   - Export: exportProject() → POST /api/export → download ZIP
+   - Preview: serialize snapshot → sessionStorage → window.open preview page
+
+8. PREVIEW PAGE (preview/PreviewPage.tsx)
+   - Reads "luxe-preview" from sessionStorage (set by header).
+   - No iframe — sections render directly in a BuilderProvider with snapshot.
+   - Device selector: Desktop / Tablet (768px or 1024px) / Mobile (375px or 667px).
+   - Orientation toggle for tablet/mobile.
+   - Zoom steps: 50% / 75% / 100% / 125% / 150%.
+   - Refresh button reloads from sessionStorage.
+   - Floating island UI anchored at bottom.
+
+
+================================================================================
+  SECTION COMPONENT SYSTEM
+================================================================================
+
+Each section component receives ONE prop: sectionId: string
+It then calls useBuilder() to get globalStyles and sectionContent.
+
+Registration (index.ts):
+  getComponentForSectionVariant(sectionId, variantId)
+    - Normalizes IDs like "features-1711234567" → "features"
+    - Looks up variant in sectionDesigns[type]
+    - Returns component (or first variant if none matched)
+
+Content Schema (contentSchemas.ts):
+  variantContentSchemas["hero-a"] = [
+    { key: "heading",     label: "Heading",     type: "text",     defaultValue: "..." },
+    { key: "subheading",  label: "Subheading",  type: "textarea", defaultValue: "..." },
+    { key: "primaryBtn",  label: "Primary CTA", type: "text",     defaultValue: "Get Started" },
+    ...
+  ]
+  Component reads: sectionContent[sectionId]["heading"] ?? defaultValue
+
+Styling (all inline — no CSS modules inside section components):
+  - Colors from globalStyles.colors
+  - borderRadius via radiusMap: { sharp: "0px", soft: "8px", rounded: "999px" }
+  - buttonStyle: border + background rules
+  - contrastText(bgColor): returns "#fff" or "#000" for readable text
+  - Shared layout: layout.module.css provides .inner (max-width 1200px, centered)
+  - All responsive via @container queries (not @media)
+
+
+================================================================================
+  STYLE PRESETS
+================================================================================
+
+Name         Radius    Button    Theme  Heading Font        Body Font     Accent
+-----------  --------  --------  ------ ------------------  ------------- ---------
+Minimal      sharp     outlined  light  Inter               Inter         black
+Apple        soft      filled    light  Plus Jakarta Sans   Plus Jakarta  #0071e3
+Elegant      soft      outlined  light  Playfair Display    Lora          #c9a87c
+Bold         rounded   filled    light  Space Grotesk       Inter         #6c5ce7
+Clean        soft      filled    light  Raleway             Open Sans     #e94560
+Tech         sharp     outlined  light  Space Grotesk       Inter         #00bcd4
+
+Note: All presets have matching dark-mode color inversions defined. When theme
+switches, primary/secondary/paragraph colors invert luminance while preserving
+hue/saturation. Accent colors are theme-aware (different values per theme).
+
+Google Fonts supported (11 total):
+  Sans: Inter, Plus Jakarta Sans, Poppins, DM Sans, Space Grotesk,
+        Montserrat, Raleway, Open Sans
+  Serif: Playfair Display, Lora, Merriweather
+
+
+================================================================================
+  EXPORT SYSTEM
+================================================================================
+
+Client (exportProject.ts):
+  1. Call exportProject(globalStyles, sections, sectionContent)
+  2. POST to /api/export with JSON body
+  3. Receive blob → trigger browser download as "website.zip"
+
+Server (route.ts) — generates a full standalone Next.js project:
+
+  Step 1: Determine which variants are in use (visible sections only)
+  Step 2: For each used section component file:
+    - Read TSX from src/components/builder/sections/
+    - Transform imports:
+        "BuilderContext"  →  "@/config/siteConfig"
+        "colorUtils"      →  "@/utils/colorUtils"
+        "_shared/styles"  →  "@/utils/styles"
+        useBuilder()      →  useSite()
+    - Copy CSS module alongside
+  Step 3: Generate config files:
+    - globals.css: font-face declarations, CSS variables, scrollbar styles
+    - layout.tsx: metadata, Google Font <link> tags (only used fonts)
+    - siteConfig.ts: exports globalStyles + sectionContent as static object
+    - page.tsx: imports only used components, renders in order
+  Step 4: Copy utilities (colorUtils.ts, styles.ts) with re-written imports
+  Step 5: Copy Satoshi font .otf files from public/fonts/ if Satoshi is used
+  Step 6: Add boilerplate: package.json (Next.js 16 / React 19), tsconfig.json,
+          next.config.ts, next-env.d.ts, README.md
+
+Output ZIP structure:
+  website/
+    src/
+      app/
+        globals.css
+        layout.tsx
+        page.tsx
+      config/siteConfig.ts
+      utils/colorUtils.ts, styles.ts
+      components/sections/
+        {ComponentName}.tsx
+        {ComponentName}.module.css
+    public/fonts/
+    public/images/
+    package.json, next.config.ts, tsconfig.json, ...
+
+Limitations of current export:
+  - Only exports the currently active page (not all 5 pages)
+  - No routing generated for multi-page sites
+  - No dynamic features (forms submit nowhere, no APIs)
+  - No image support (placeholders only)
+  - Custom imports beyond the whitelist will break the transform
+
+
+================================================================================
+  DATA FLOWS (KEY INTERACTIONS)
+================================================================================
+
+CLICKING A SECTION ON CANVAS:
+  canvas click (< 5px movement)
+  → setActiveConfigId(sectionId)
+  → scrollToSectionId: triggers easeOutCubic scroll in canvas (400ms)
+  → SecondarySidebar opens in Design Picker mode
+  → Sidebar auto-expands "Sections" accordion on mobile
+
+EDITING CONTENT:
+  Sidebar Content panel → click section name
+  → setActiveConfigId("content:sectionId")
+  → SecondarySidebar shows form fields from variantContentSchemas[designVariant]
+  → User types → setSectionContent(sectionId, key, value)
+  → Section component re-renders reading sectionContent[sectionId][key]
+
+SWITCHING DESIGN VARIANT:
+  SecondarySidebar Design Picker → click variant card
+  → updateSectionVariant(sectionId, variantId)
+  → pageSections updated with new designVariant
+  → BuilderCanvas re-renders that section with new component
+  → Content schema changes (different fields for new variant)
+
+APPLYING A PRESET:
+  Sidebar Start panel → click preset button
+  → setGlobalStyles({ ...preset values })
+  → ALL sections re-render (they all read globalStyles from context)
+
+THEME TOGGLE:
+  Sidebar → theme switch
+  → Colors are luminance-inverted (hue/saturation preserved)
+  → Canvas background inverts (#0a0a0a ↔ #fff)
+
+FULL PREVIEW:
+  Header "Preview" button
+  → Snapshot: { globalStyles, sections, sectionContent } → sessionStorage
+  → window.open("/web-builder/preview")
+  → PreviewPage reads snapshot, renders sections in BuilderProvider
+
+EXPORT:
+  Header "Export" button
+  → exportProject(globalStyles, activeSections, sectionContent)
+  → POST /api/export
+  → Server generates ZIP
+  → Browser downloads website.zip
+
+ADD SECTION:
+  Sections panel "+" dropdown → pick section type
+  → New SectionItem appended before footer with unique ID
+  → Default content applied from contentSchemas defaultValues
+  → Section appears on canvas immediately
+
+DRAG & DROP REORDER:
+  Sections panel grip drag
+  → Drop indicator renders at valid insertion points
+  → Locked sections (nav/hero/footer) block insertion before/after them
+  → Hidden sections stay at the end of the list regardless
+
+
+================================================================================
+  STYLING CONVENTIONS
+================================================================================
+
+- Section components: ALL inline styles (no CSS modules)
+- Layout components: CSS files (BuilderSidebar.css, BuilderCanvas.css, etc.)
+- Marketing pages: CSS Modules (.module.css)
+- Responsive in sections: @container queries with cqi units
+- Responsive in layout: regular CSS media queries
+- Canvas wrapper and preview wrapper both have container-type: inline-size
+  so @container queries work at any zoom level
+- Exported page.tsx adds container-type: inline-size to the <main> element
+- contrastText(color) utility auto-picks white or black text for accessibility
+
+
+================================================================================
+  KNOWN LIMITATIONS & EDGE CASES
+================================================================================
+
+1. Multi-page export: Only the active page is exported. Pages 2–5 are lost.
+2. No persistence: State only lives in React memory. Refresh = reset.
+3. No image support: All image areas are CSS placeholder rectangles.
+4. Feature Section limit: Max 3 feature sections per page (enforced in UI).
+5. Font list is fixed at 11 Google Fonts; no custom font upload.
+6. AI button in Content panel is a UI stub — not connected to anything.
+7. Content field types are limited (text/textarea/list) — no rich text, no
+   image pickers, no toggles, no numbers.
+8. Export transform only rewrites known import patterns; unexpected imports
+   in section components will break the exported project.
+9. No undo/redo — any accidental change is permanent for the session.
+10. Preview is session-only (sessionStorage) — closing the tab clears it.
+11. Section variants do not carry content forward: switching a variant resets
+    visible fields to defaults (though old sectionContent keys persist in state).
+12. No support for forms actually submitting data in exported sites.
+13. Sections cannot be shared/copied between pages (each page starts fresh).
+
+
+================================================================================
+  END OF CONTEXT OVERVIEW
+================================================================================

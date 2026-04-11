@@ -1,0 +1,91 @@
+.section-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.section-list.dragging {
+  cursor: grabbing !important;
+}
+
+.section-list.dragging * {
+  cursor: grabbing !important;
+}
+
+.section-list.dragging .section-item * {
+  pointer-events: none;
+}
+
+.section-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+  font-size: 13px;
+  color: #888;
+}
+
+.section-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.section-item.active {
+  background: rgba(152, 126, 210, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.section-item .section-grip {
+  color: #444;
+  flex-shrink: 0;
+  margin-right: 8px;
+  cursor: grab;
+}
+
+.section-item .section-lock {
+  color: #333;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+.section-item .section-title {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.section-item .section-actions {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.section-item:hover .section-actions {
+  opacity: 1;
+}
+
+.section-item .section-copy, .section-item .section-delete {
+  color: #444;
+  flex-shrink: 0;
+  padding: 4px;
+  display: flex;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.section-item .section-copy:hover, .section-item .section-delete:hover {
+  color: #888;
+}
+
+.drop-indicator {
+  pointer-events: none;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #987ed2, transparent);
+  box-shadow: 0 0 8px rgba(152, 126, 210, 0.6);
+  border-radius: 2px;
+}

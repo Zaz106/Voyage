@@ -1,0 +1,63 @@
+/* FeatureB — Numbered vertical list */
+
+.section {
+  padding: 80px 0;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 600;
+  margin: 0 0 48px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 28px 0;
+}
+
+.num {
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 28px;
+  padding-top: 2px;
+}
+
+.itemTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+
+.itemDesc {
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 480px;
+}
+
+@container (max-width: 640px) {
+  .section {
+    padding: 56px 0;
+  }
+
+  .title {
+    font-size: 26px;
+    margin-bottom: 32px;
+  }
+
+  .item {
+    gap: 16px;
+    padding: 20px 0;
+  }
+
+  .itemTitle {
+    font-size: 16px;
+  }
+}

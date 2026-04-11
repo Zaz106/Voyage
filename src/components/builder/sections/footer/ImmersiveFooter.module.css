@@ -1,0 +1,187 @@
+.footer {
+  position: relative;
+  overflow: hidden;
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Background layer ── */
+.bgLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.bgGradient {
+  position: absolute;
+  inset: 0;
+  /* background set via inline style to use global accent colour */
+}
+
+.bgOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.6) 60%, rgba(0, 0, 0, 0.9) 100%);
+}
+
+/* ── Content ── */
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 2.5rem 0;
+}
+
+/* ── Top bar ── */
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: auto;
+}
+
+.logoText {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.topTagline {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* ── Columns ── */
+.columnsRow {
+  display: flex;
+  gap: 0;
+  margin-top: auto;
+  margin-bottom: 2rem;
+  padding-top: 2rem;
+}
+
+.colGroup {
+  flex: 1;
+  padding: 0 2rem;
+}
+
+.colGroup:first-child {
+  padding-left: 0;
+}
+
+.colGroup:last-child {
+  padding-right: 0;
+}
+
+@container (max-width: 1024px) {
+  .colGroup {
+    padding: 0 1.2rem;
+  }
+  .content {
+    padding: 2rem 0;
+  }
+}
+
+.colDivider {
+  width: 1px;
+  align-self: stretch;
+  flex-shrink: 0;
+}
+
+.colTitle {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin: 0 0 1rem;
+}
+
+.colLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.colLinks a {
+  font-size: 0.85rem;
+  text-decoration: none;
+  font-weight: 300;
+  transition: opacity 0.2s ease;
+}
+
+.colLinks a:hover {
+  opacity: 0.7;
+}
+
+/* ── Giant brand ── */
+.bigNameWrap {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.bigName {
+  display: block;
+  font-size: clamp(48px, 14cqi, 220px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  line-height: 0.85;
+  text-align: center;
+  width: 100%;
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 100%);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 100%);
+}
+
+@container (max-width: 724px) {
+  .content {
+    padding: 2rem 0;
+  }
+
+  .columnsRow {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .colDivider {
+    width: 100%;
+    height: 1px;
+  }
+
+  .colGroup {
+    padding: 0;
+  }
+
+  .topBar {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@container (max-width: 430px) {
+  .content {
+    padding: 1.5rem 0;
+  }
+
+  .colTitle {
+    font-size: 0.72rem;
+  }
+
+  .colLinks a {
+    font-size: 0.78rem;
+  }
+
+  .logoText {
+    font-size: 0.95rem;
+  }
+
+  .footer {
+    min-height: 380px;
+  }
+}

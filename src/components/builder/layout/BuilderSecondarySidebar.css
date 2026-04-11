@@ -1,0 +1,144 @@
+/* BuilderSecondarySidebar.css */
+.builder-secondary-sidebar {
+  position: absolute;
+  left: 300px;
+  top: 0;
+  bottom: 0;
+  width: 280px;
+  background-color: #161616;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  z-index: 110;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition:
+    transform 0.3s cubic-bezier(0.2, 0, 0, 1),
+    opacity 0.2s ease,
+    width 0.25s ease;
+}
+
+.builder-secondary-sidebar.content-mode {
+  width: 340px;
+}
+
+.secondary-sidebar-header {
+  height: 60px;
+  min-height: 60px;
+  padding: 0 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.secondary-sidebar-title {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.close-button {
+  cursor: pointer;
+  padding: 4px;
+  margin-top: 4px;
+}
+
+.secondary-sidebar-content {
+  padding: 20px;
+  color: #888;
+  font-size: 13px;
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  min-height: 0;
+}
+
+.secondary-sidebar-content::-webkit-scrollbar { width: 6px; }
+.secondary-sidebar-content::-webkit-scrollbar-track { background: transparent; }
+.secondary-sidebar-content::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; }
+.secondary-sidebar-content:hover::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.08); }
+.secondary-sidebar-content::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.15); }
+.secondary-sidebar-content::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+.secondary-sidebar-content::-webkit-scrollbar-corner { background: transparent; }
+.secondary-sidebar-content:hover {
+  scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+}
+
+.empty-state {
+  color: #666;
+  text-align: center;
+  margin-top: 40px;
+}
+
+/* Font picker */
+.font-section-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+}
+
+.font-section-active {
+  font-size: 12px;
+  color: #987ed2;
+  font-weight: 500;
+}
+
+.font-item {
+  padding: 14px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.font-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Save button */
+.save-content-button {
+  width: 100%;
+  padding: 12px 0;
+  background: #000000;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  font-family: inherit;
+}
+
+.save-content-button:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* ===== Tablet (641–1024px): secondary sidebar repositions ===== */
+@media (max-width: 1024px) {
+  .builder-secondary-sidebar {
+    left: 280px;
+    width: 260px;
+  }
+
+  .builder-secondary-sidebar.content-mode {
+    width: 300px;
+  }
+}
+
+/* ===== Mobile (≤640px): secondary sidebar overlays full width ===== */
+@media (max-width: 640px) {
+  .builder-secondary-sidebar {
+    left: 0;
+    width: 100vw;
+    z-index: 120;
+  }
+
+  .builder-secondary-sidebar.content-mode {
+    width: 100vw;
+  }
+}

@@ -1,0 +1,173 @@
+/* BuilderHeader.css */
+.builder-header {
+  height: 60px;
+  background-color: #161616ff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  justify-content: space-between;
+  z-index: 20;
+  position: relative;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.back-button {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-family: var(--font-body);
+}
+
+.divider {
+  width: 1px;
+  height: 24px;
+  background-color: var(--border);
+}
+
+.header-title {
+  font-size: 16px;
+  font-weight: 300;
+  margin: 0;
+  font-family: var(--font-heading);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Action buttons (Export / Preview) */
+.header-action-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  padding: 7px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.header-action-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.header-action-button.primary {
+  background: #fff;
+  color: #111;
+  border-color: transparent;
+}
+
+.header-action-button.primary:hover {
+  background: #e8e8e8;
+  color: #000;
+}
+
+/* Export spinner */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+.header-action-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Undo/Redo icon-only buttons */
+.header-center {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.header-action-button.icon-only {
+  padding: 7px 9px;
+  min-width: unset;
+}
+
+/* ===== Tablet & below ===== */
+@media (max-width: 1024px) {
+  .builder-header {
+    padding: 0 16px;
+  }
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 640px) {
+  .builder-header {
+    height: 56px;
+    padding: 0 16px;
+  }
+
+  .back-button-label {
+    display: none;
+  }
+
+  .header-action-label {
+    display: none;
+  }
+
+  .header-action-button {
+    padding: 7px 10px;
+  }
+
+  .header-title {
+    font-size: 14px;
+  }
+
+  .header-left {
+    gap: 12px;
+  }
+
+  .divider {
+    height: 18px;
+  }
+}
+
+/* ===== Dev mode button — hidden on <768px, shown on tablet+ ===== */
+.header-action-button.dev-button {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .header-action-button.dev-button {
+    display: flex;
+  }
+
+  .header-action-button.dev-button.active {
+    background: rgba(120, 90, 200, 0.15);
+    border-color: rgba(120, 90, 200, 0.35);
+    color: rgba(180, 155, 255, 0.95);
+  }
+
+  .header-action-button.dev-button.active:hover {
+    background: rgba(120, 90, 200, 0.22);
+    border-color: rgba(120, 90, 200, 0.5);
+    color: rgba(200, 180, 255, 1);
+  }
+}

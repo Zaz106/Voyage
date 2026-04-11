@@ -1,0 +1,280 @@
+/* =================================================================
+   Preview Page Styles
+   ================================================================= */
+
+/* -- Page wrapper -- */
+
+.preview-wrapper {
+  min-height: 100vh;
+  position: relative;
+  background: #0a0a0a;
+  overflow-y: auto;
+  padding-bottom: 80px;
+}
+
+.preview-wrapper.framed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 56px 24px 120px;
+}
+
+/* -- Empty state -- */
+
+.preview-empty {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0a0a;
+  color: #555;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+}
+
+/* -- Viewport dimension pill -- */
+
+.preview-dim-badge {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 14px;
+  border-radius: 20px;
+  z-index: 100;
+  font-family: "SF Mono", "Fira Code", ui-monospace, monospace;
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  pointer-events: none;
+}
+
+/* -- Device frame -- */
+
+.preview-frame {
+  margin: 0 auto;
+  transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.preview-frame.desktop {
+  width: 100%;
+}
+
+.preview-frame.tablet,
+.preview-frame.mobile {
+  max-width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 30px 80px -16px rgba(0, 0, 0, 0.6);
+}
+
+/* -- Content wrapper (container for @container queries) -- */
+
+.preview-content {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* -- Floating Island Toolbar -- */
+
+.preview-island {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: #161616;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 6px;
+  z-index: 9999;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+/* -- Island buttons -- */
+
+.island-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.island-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.island-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.island-btn:disabled {
+  opacity: 0.25;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* -- Zoom label -- */
+
+.island-zoom-label {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 11px;
+  font-weight: 500;
+  min-width: 36px;
+  text-align: center;
+  font-family: "SF Mono", "Fira Code", ui-monospace, monospace;
+  letter-spacing: -0.02em;
+  user-select: none;
+}
+
+/* -- Divider -- */
+
+.island-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 0 2px;
+  flex-shrink: 0;
+}
+
+/* -- Back button -- */
+
+.island-btn-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #fff;
+  border: none;
+  color: #111;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.island-btn-back:hover {
+  background: #e8e8e8;
+}
+
+/* -- Responsive island -- */
+
+@media (max-width: 680px) {
+  .preview-island {
+    bottom: 12px;
+    padding: 4px;
+    gap: 1px;
+    border-radius: 14px;
+    max-width: calc(100vw - 16px);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .preview-island::-webkit-scrollbar {
+    display: none;
+  }
+
+  .island-btn {
+    padding: 6px 8px;
+    flex-shrink: 0;
+  }
+
+  .island-btn-back {
+    padding: 6px 10px;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .island-zoom-label {
+    font-size: 10px;
+    min-width: 28px;
+    flex-shrink: 0;
+  }
+
+  .preview-dim-badge {
+    font-size: 10px;
+    padding: 3px 10px;
+  }
+}
+
+/* -- Orientation icon -- */
+
+.orient-icon {
+  transform: rotate(0deg);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  display: block;
+}
+
+.orient-icon.is-landscape {
+  transform: rotate(-90deg);
+}
+
+/* -- Tooltips -- */
+
+.preview-island [data-tooltip] {
+  position: relative;
+}
+
+.preview-island [data-tooltip]::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 9px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: #222;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 10001;
+  font-family: Inter, system-ui, sans-serif;
+  letter-spacing: 0.01em;
+}
+
+.preview-island [data-tooltip]:hover::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* No tooltips on touch devices */
+@media (hover: none) {
+  .preview-island [data-tooltip]::before {
+    display: none;
+  }
+}

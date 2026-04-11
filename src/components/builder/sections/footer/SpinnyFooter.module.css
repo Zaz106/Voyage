@@ -1,0 +1,101 @@
+.footer {
+    padding: 5rem 0;
+    text-align: center;
+    overflow: hidden;
+}
+
+.carouselContainer {
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    position: relative;
+    padding: 1rem 0;
+}
+
+.nav {
+    display: flex;
+    white-space: nowrap;
+}
+
+.navTrack {
+    display: flex;
+    gap: 6rem;
+    padding-right: 6rem;
+    animation: scroll-left 40s linear infinite;
+}
+
+.carouselContainer:hover .navTrack {
+    animation-play-state: paused;
+}
+
+.navTrack a {
+    font-size: 3rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    transition: opacity 0.3s ease;
+    text-decoration: none;
+}
+
+.navTrack a:hover {
+    opacity: 0.7;
+}
+
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.copy {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    padding: 0 1.5rem;
+    font-weight: 400;
+}
+
+.legal {
+    font-size: 2rem;
+    text-transform: uppercase;
+    display: block;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.legal:hover {
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+@container (max-width: 724px) {
+    .navTrack a {
+        font-size: 2rem;
+    }
+    .navTrack {
+        gap: 3rem;
+        padding-right: 3rem;
+        animation-duration: 25s;
+    }
+}
+
+@container (max-width: 430px) {
+    .navTrack a {
+        font-size: 1.4rem;
+    }
+    .navTrack {
+        gap: 2rem;
+        padding-right: 2rem;
+    }
+    .copy {
+        font-size: 0.85rem;
+    }
+    .legal {
+        font-size: 1.4rem;
+    }
+    .footer {
+        padding: 3rem 0;
+    }
+}

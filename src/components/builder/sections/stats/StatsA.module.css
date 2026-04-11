@@ -1,0 +1,56 @@
+/* StatsA — horizontal stat strip */
+
+.section {
+  padding: 52px 0;
+}
+
+.label {
+  text-align: center;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  opacity: 0.6;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0;
+}
+
+.item + .item {
+  border-left: 1px solid rgba(128, 128, 128, 0.15);
+}
+
+.value {
+  font-size: clamp(2rem, 5cqi, 3rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: clamp(0.75rem, 1.5cqi, 0.875rem);
+  opacity: 0.65;
+}
+
+@container (max-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 0;
+  }
+  .item + .item {
+    border-left: none;
+  }
+  .item:nth-child(2n) {
+    border-left: 1px solid rgba(128, 128, 128, 0.15);
+  }
+}

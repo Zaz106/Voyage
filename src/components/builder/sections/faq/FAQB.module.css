@@ -1,0 +1,79 @@
+/* FAQB — Accordion FAQ with side heading */
+
+.section {
+  padding: 80px 0;
+}
+
+.layout {
+  display: flex;
+  gap: 64px;
+  max-width: 960px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+.heading {
+  flex: 0 1 280px;
+  min-width: 200px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 600;
+  margin: 0;
+  white-space: pre-line;
+}
+
+.accordion {
+  flex: 1;
+}
+
+.itemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  cursor: pointer;
+}
+
+.question {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.toggle {
+  font-size: 20px;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+  margin-left: 16px;
+}
+
+.answerWrap {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.answer {
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 0 0 20px;
+  padding-right: 40px;
+}
+
+@container (max-width: 640px) {
+  .section {
+    padding: 56px 0;
+  }
+
+  .layout {
+    gap: 32px;
+  }
+
+  .title {
+    font-size: 26px;
+  }
+
+  .question {
+    font-size: 14px;
+  }
+}

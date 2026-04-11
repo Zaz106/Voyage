@@ -1,0 +1,86 @@
+/* PricingA — 3-column pricing cards */
+
+.section {
+  padding: 80px 0;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 600;
+  text-align: center;
+  margin: 0 0 48px;
+}
+
+.grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1 1 240px;
+  min-width: 0;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+}
+
+.planName {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.price {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.priceUnit {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.planDesc {
+  font-size: 13px;
+  margin-bottom: 24px;
+}
+
+.featureList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+  flex: 1;
+}
+
+.featureItem {
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.check {
+  font-size: 14px;
+}
+
+.btn {
+  padding: 10px 0;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+}
+
+@container (max-width: 640px) {
+  .section {
+    padding: 56px 0;
+  }
+
+  .title {
+    font-size: 26px;
+    margin-bottom: 32px;
+  }
+}

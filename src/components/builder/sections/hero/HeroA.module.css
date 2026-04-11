@@ -1,0 +1,71 @@
+/* HeroA — Centered hero with dual buttons */
+
+.hero {
+  min-height: calc(var(--preview-vh, 100vh) - 60px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px 0;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.heading {
+  font-size: 52px;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 16px;
+  white-space: pre-line;
+  max-width: 100%;
+}
+
+.subheading {
+  font-size: 17px;
+  max-width: 520px;
+  margin: 0 auto 36px;
+  line-height: 1.6;
+}
+
+.buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 12px 28px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+@container (max-width: 720px) {
+  .hero {
+    padding: 56px 0;
+  }
+
+  .heading {
+    font-size: 36px;
+  }
+
+  .subheading {
+    font-size: 15px;
+    max-width: 400px;
+  }
+}
+
+@container (max-width: 480px) {
+  .hero {
+    padding: 48px 0;
+  }
+
+  .heading {
+    font-size: 28px;
+  }
+
+  .subheading {
+    font-size: 14px;
+    max-width: 300px;
+  }
+}

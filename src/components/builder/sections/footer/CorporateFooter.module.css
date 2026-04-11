@@ -1,0 +1,171 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+  padding: 3.5rem 0 0;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── Top section ── */
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 3rem;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 300px;
+}
+
+.logoText {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  font-size: 0.82rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Nav columns ── */
+.navColumns {
+  display: flex;
+  gap: 3.5rem;
+  flex-wrap: wrap;
+}
+
+@container (max-width: 1024px) {
+  .navColumns {
+    gap: 2rem;
+  }
+}
+
+.navCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.colTitle {
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin: 0 0 0.4rem;
+}
+
+.navLink {
+  font-size: 0.82rem;
+  font-weight: 400;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.navLink:hover {
+  opacity: 0.6;
+}
+
+/* ── Bottom bar ── */
+.bottomBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 0;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.copyright {
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+.legalLinks {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.legalLinks a {
+  font-size: 0.75rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: opacity 0.2s;
+}
+
+.legalLinks a:hover {
+  opacity: 0.6;
+}
+
+/* ── Giant brand ── */
+.bigNameWrap {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.bigName {
+  display: block;
+  font-size: clamp(48px, 14cqi, 200px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  line-height: 0.85;
+  text-align: center;
+  width: 100%;
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+}
+
+@container (max-width: 724px) {
+  .footer {
+    padding: 2.5rem 0 0;
+  }
+
+  .top {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .navColumns {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .bottomBar {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+@container (max-width: 430px) {
+  .footer {
+    padding: 2rem 0 0;
+  }
+
+  .tagline {
+    font-size: 0.75rem;
+  }
+
+  .navLink {
+    font-size: 0.75rem;
+  }
+
+  .copyright {
+    font-size: 0.68rem;
+  }
+
+  .legalLinks a {
+    font-size: 0.68rem;
+  }
+}

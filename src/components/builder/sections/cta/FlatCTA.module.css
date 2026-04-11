@@ -1,0 +1,56 @@
+.section {
+  padding: 80px 48px;
+}
+
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.heading {
+  font-size: clamp(28px, 3cqi, 38px);
+  margin: 0 0 16px;
+}
+
+.description {
+  font-size: 15px;
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@container (max-width: 1024px) {
+  .section {
+    padding: 64px 32px;
+  }
+}
+
+@container (max-width: 724px) {
+  .section {
+    padding: 48px 20px;
+  }
+  .heading {
+    font-size: 26px;
+  }
+  .description {
+    font-size: 14px;
+  }
+}
+
+@container (max-width: 430px) {
+  .section {
+    padding: 36px 16px;
+  }
+  .heading {
+    font-size: 22px;
+  }
+  .description {
+    font-size: 13px;
+  }
+}

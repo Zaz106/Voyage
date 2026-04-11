@@ -1,0 +1,125 @@
+.global-style-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px 4px;
+}
+
+.style-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.global-style-label {
+  font-size: 13px;
+  color: #fff;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+/* Palette */
+.palette-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0;
+}
+
+.palette-label {
+  font-size: 13px;
+  color: #888;
+}
+
+.palette-swatch {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Font Pairing */
+.font-pairing-preview {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.font-primary {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.font-secondary {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.font-divider {
+  color: #444;
+}
+
+/* Border Radius */
+.checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.checkbox-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #888;
+  cursor: pointer;
+}
+
+.custom-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-checkbox.checked {
+  border-color: #fff;
+  background-color: transparent;
+}
+
+.checkbox-inner {
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+}
+
+/* Segmented Control */
+.segmented-control {
+  display: flex;
+  background-color: #1a1a1a;
+  border-radius: 20px;
+  padding: 2px;
+  height: 32px;
+  border: 1px solid #333;
+}
+
+.segment-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #666;
+  cursor: pointer;
+  border-radius: 16px;
+  transition: all 0.2s ease;
+}
+
+.segment-option.active {
+  background-color: #000;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}

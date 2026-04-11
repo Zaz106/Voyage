@@ -1,0 +1,66 @@
+/* BuilderLayout.css */
+.builder-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: var(--background);
+}
+
+.builder-main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Sidebar drawer wrapper — on desktop it's static, on smaller screens it's a slide-over */
+.sidebar-drawer {
+  display: contents; /* On desktop, let children flow normally */
+}
+
+/* Overlay backdrop — hidden on desktop */
+.sidebar-overlay {
+  display: none;
+}
+
+/* ===== Tablet & below (≤1024px): sidebar becomes a drawer ===== */
+@media (max-width: 1024px) {
+  .sidebar-drawer {
+    display: flex;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    bottom: 0;
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .sidebar-drawer.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    top: 60px;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 199;
+  }
+}
+
+/* ===== Mobile (≤640px) ===== */
+@media (max-width: 640px) {
+  .sidebar-drawer {
+    /* Full width on mobile */
+    right: 0;
+    top: 56px;
+  }
+
+  .sidebar-overlay {
+    top: 56px;
+  }
+}
