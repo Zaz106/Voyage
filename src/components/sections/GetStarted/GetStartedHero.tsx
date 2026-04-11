@@ -6,10 +6,10 @@ const GetStartedHero = () => {
     <section className={styles.heroSection}>
       <div className={styles.heroBackground} aria-hidden>
         <Image
-          src="/images/get-started-hero-image.jpg"
+          src="/images/get-started-hero-image.webp"
           alt=""
           fill
-          style={{ objectFit: "cover", objectPosition: "center" }}
+          style={{ objectFit: "cover", objectPosition: "top" }}
           priority
         />
       </div>

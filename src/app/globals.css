@@ -47,3 +47,169 @@ a {
     color-scheme: dark;
   }
 }
+
+/* Mobile First & Responsive Variables */
+:root {
+  --background: #111111;
+  --foreground: #ffffff;
+
+  /* Font Families */
+  --font-heading: "Satoshi", sans-serif;
+  --font-body: "Instrument Sans", sans-serif;
+
+  /* Font Sizes - Desktop Reference */
+  --h1-size: 8rem; /* 128px */
+  --h2-size: 5.5rem; /* 96px */
+  --h3-size: 3rem; /* 48px */
+  --text-lg: 1.5rem; /* 24px */
+  --text-base: 1.125rem; /* 18px */
+  --text-sm: 0.875rem; /* 14px */
+
+  /* Colors */
+  --accent: #987ed2;
+  --border: rgba(255, 255, 255, 0.1);
+}
+
+/* Breakpoints Configuration */
+/* 
+   Mobile:  < 480px
+   Tablet:  481px - 768px
+   Laptop:  769px - 1024px
+   Desktop: > 1025px
+*/
+
+@media (max-width: 1280px) {
+  :root {
+    --h1-size: 5.5rem;
+    --h2-size: 4.5rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --h1-size: 5rem;
+    --h2-size: 4rem;
+    --h3-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --h1-size: 4.5rem;
+    --h2-size: 3.5rem;
+    --h3-size: 2rem;
+    --text-lg: 1.25rem;
+    --text-base: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --h1-size: 3.75rem;
+    --h2-size: 3rem;
+    --h3-size: 1.75rem;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 100%; /* Base 16px */
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  line-height: 1.1;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 5px;
+  border: 2px solid #0a0a0a; /* Creates padding effect */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("/fonts/Satoshi-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("/fonts/Satoshi-LightItalic.otf") format("opentype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("/fonts/Satoshi-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("/fonts/Satoshi-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("/fonts/Satoshi-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("/fonts/Satoshi-Black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
