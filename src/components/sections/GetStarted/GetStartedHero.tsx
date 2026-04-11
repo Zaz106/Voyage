@@ -7,9 +7,12 @@ const GetStartedHero = () => {
       <div className={styles.heroBackground} aria-hidden>
         <Image
           src="/images/get-started-hero-image.webp"
-          alt=""
+          alt="Hero Image"
           fill
+          sizes="100vw"
           style={{ objectFit: "cover", objectPosition: "top" }}
+          placeholder="blur"
+          blurDataURL="data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAADQAQCdASoIAAUAAUAmJYgCdAEO/gHOAAA="
           priority
         />
       </div>
