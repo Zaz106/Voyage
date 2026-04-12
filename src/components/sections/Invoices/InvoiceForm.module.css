@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════
-   GetStartedForm — Smart Project Brief
+   InvoiceForm — Create Invoice
    ══════════════════════════════════════ */
 
 /* ── Section & Card ── */
@@ -136,8 +136,8 @@
   font-family: var(--font-heading);
   width: 100%;
   padding: 1rem 1.25rem;
-  background: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fafafa;
+  border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 12px;
   font-size: 1rem;
   color: #1a1a1a;
@@ -211,8 +211,8 @@
   font-family: var(--font-heading);
   width: 100%;
   padding: 0.875rem 1.125rem 1.75rem;
-  background: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fafafa;
+  border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 12px;
   font-size: 1rem;
   color: #1a1a1a;
@@ -249,107 +249,6 @@
 
 .charCounterWarn {
   color: #d94444;
-}
-
-/* ── Phone input ── */
-.phoneRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
-
-.phoneInputContainer {
-  display: flex;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  overflow: visible;
-  transition: all 0.3s ease;
-  background: #ffffff;
-}
-
-.phoneInputContainer:focus-within {
-  border-color: rgba(0, 0, 0, 0.3);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-}
-
-.phoneInputContainerError {
-  border-color: #d94444 !important;
-}
-
-.countrySelector {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0 1.25rem;
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  position: relative;
-  background: #ffffff;
-  border-top-left-radius: 11px;
-  border-bottom-left-radius: 11px;
-}
-
-.flagIcon {
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-}
-
-.countryCode {
-  font-size: 1rem;
-  color: #000000;
-  font-weight: 400;
-}
-
-.countryDropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  width: 120px;
-  background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  z-index: 100;
-  overflow: hidden;
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-.countryOption {
-  color: #000000;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.75rem 1rem;
-  transition: background 0.2s;
-  cursor: pointer;
-}
-
-.countryOption:hover {
-  background: rgba(0, 0, 0, 0.1);
-}
-
-.optionFlag {
-  width: 20px;
-  height: 20px;
-}
-
-.phoneInput {
-  flex: 1;
-  padding: 1.1rem 1.25rem;
-  background: transparent;
-  border: none;
-  font-size: 1rem;
-  color: #000000;
-  outline: none;
-}
-
-.phoneInput::placeholder {
-  color: rgba(0, 0, 0, 0.2);
-  font-weight: 300;
 }
 
 /* ── Option buttons (single select) ── */
@@ -391,45 +290,6 @@
   color: #ffffff;
 }
 
-/* ── Chips (multi-select) ── */
-.chipGroup {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.625rem;
-  margin-top: 0.25rem;
-}
-
-.chip {
-  padding: 0.625rem 1.375rem;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 999px;
-  background: transparent;
-  color: rgba(0, 0, 0, 0.65);
-  font-family: var(--font-heading);
-  font-size: 0.9375rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-  touch-action: manipulation;
-}
-
-.chip:hover {
-  border-color: rgba(0, 0, 0, 0.3);
-  color: #1a1a1a;
-}
-
-.chipSelected {
-  background: var(--accent, #987ed2);
-  color: #ffffff;
-  border-color: var(--accent, #987ed2);
-}
-
-.chipSelected:hover {
-  opacity: 0.9;
-  color: #ffffff;
-  border-color: var(--accent, #987ed2);
-}
-
 /* ── Conditional fields ── */
 .conditionalFields {
   padding-left: 1.25rem;
@@ -440,105 +300,117 @@
   gap: 1.5rem;
 }
 
-/* ── Hint text ── */
-.multiSelectHint {
+/* ── Line items ── */
+.lineItemCard {
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.lineItemHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lineItemIndex {
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.removeLineItem {
+  background: none;
+  border: none;
+  color: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 6px;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+}
+
+.removeLineItem:hover {
+  color: #d94444;
+  background: rgba(217, 68, 68, 0.06);
+}
+
+.lineItemRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+.lineItemAmount {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  padding: 1rem 1.25rem;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.lineItemError {
   font-family: var(--font-body);
   font-size: 0.875rem;
-  color: rgba(0, 0, 0, 0.35);
-  margin-top: -0.5rem;
+  color: #d94444;
+  margin-bottom: -0.5rem;
 }
 
-/* ── Guidance callout ── */
-.guidanceCallout {
+.addLineItemBtn {
   display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 1.25rem 1.5rem;
-  background: rgba(152, 126, 210, 0.06);
-  border-radius: 12px;
-  border: 1px solid rgba(152, 126, 210, 0.12);
-  margin-top: -0.25rem;
-}
-
-.guidanceIcon {
-  flex-shrink: 0;
-  color: var(--accent, #987ed2);
-  margin-top: 1px;
-}
-
-.guidanceText {
-  font-family: var(--font-body);
-  font-size: 0.9375rem;
-  color: rgba(0, 0, 0, 0.55);
-  line-height: 1.5;
-}
-
-/* ── File upload ── */
-.uploadArea {
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem;
   border: 1.5px dashed rgba(0, 0, 0, 0.12);
   border-radius: 12px;
-  padding: 2rem;
-  text-align: center;
+  background: transparent;
+  color: rgba(0, 0, 0, 0.45);
+  font-family: var(--font-heading);
+  font-size: 0.9375rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  background: transparent;
 }
 
-.uploadArea:hover {
+.addLineItemBtn:hover {
   border-color: rgba(0, 0, 0, 0.25);
+  color: #1a1a1a;
   background: rgba(0, 0, 0, 0.01);
 }
 
-.uploadIcon {
-  color: rgba(0, 0, 0, 0.25);
-  margin-bottom: 0.5rem;
+/* ── Totals ── */
+.runningTotal,
+.totalsSummary {
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  padding-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.uploadText {
+.totalRow {
+  display: flex;
+  justify-content: space-between;
   font-family: var(--font-heading);
   font-size: 0.9375rem;
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(0, 0, 0, 0.55);
 }
 
-.uploadHint {
-  font-family: var(--font-body);
-  font-size: 0.8125rem;
-  color: rgba(0, 0, 0, 0.3);
-  margin-top: 0.25rem;
-}
-
-.uploadedFiles {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-}
-
-.uploadedFile {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.375rem 0.875rem;
-  background: rgba(0, 0, 0, 0.04);
-  border-radius: 999px;
-  font-family: var(--font-heading);
-  font-size: 0.8125rem;
-  color: rgba(0, 0, 0, 0.65);
-}
-
-.removeFile {
-  background: none;
-  border: none;
-  color: rgba(0, 0, 0, 0.35);
-  cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  transition: color 0.15s;
-}
-
-.removeFile:hover {
-  color: #d94444;
+.totalRowFinal {
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1a1a1a;
 }
 
 /* ── Summary step ── */
@@ -795,7 +667,7 @@
   background: #2a2a2a;
 }
 
-/* ── Thank you screen (modal content) ── */
+/* ── Thank you / error (modal content) ── */
 .thankYouIcon {
   width: 64px;
   height: 64px;
@@ -837,16 +709,50 @@
   max-width: 450px;
 }
 
+/* ── Invoice link box (success modal) ── */
+.invoiceLinkBox {
+  display: flex;
+  width: 100%;
+  margin-top: 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.invoiceLinkInput {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  color: #1a1a1a;
+  border: none;
+  background: #fafafa;
+  outline: none;
+}
+
+.copyBtn {
+  padding: 0.75rem 1.25rem;
+  background: #1a1a1a;
+  color: #ffffff;
+  border: none;
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.copyBtn:hover {
+  background: #2a2a2a;
+}
+
 /* ── Autofill styling ── */
 .fieldInput:-webkit-autofill,
 .fieldInput:-webkit-autofill:hover,
 .fieldInput:-webkit-autofill:focus,
 .fieldTextarea:-webkit-autofill,
 .fieldTextarea:-webkit-autofill:hover,
-.fieldTextarea:-webkit-autofill:focus,
-.phoneInput:-webkit-autofill,
-.phoneInput:-webkit-autofill:hover,
-.phoneInput:-webkit-autofill:focus {
+.fieldTextarea:-webkit-autofill:focus {
   -webkit-text-fill-color: #1a1a1a;
   -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
   transition: background-color 5000s ease-in-out 0s;
@@ -896,19 +802,25 @@
     margin-bottom: 2.25rem;
   }
 
-  .fieldRow,
-  .phoneRow {
+  .fieldRow {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
 
-  .optionGroup,
-  .chipGroup {
+  .lineItemRow {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .lineItemRow .fieldGroup:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .optionGroup {
     gap: 0.5rem;
   }
 
-  .optionBtn,
-  .chip {
+  .optionBtn {
     font-size: 0.875rem;
     padding: 0.5625rem 1.125rem;
   }
@@ -916,10 +828,6 @@
   .navButtons {
     margin-top: 2.5rem;
     padding-top: 1.5rem;
-  }
-
-  .thankYou {
-    padding: 4rem 2rem;
   }
 
   .thankYouTitle {
@@ -944,11 +852,7 @@
 
   .fieldInput,
   .fieldTextarea {
-    font-size: 1rem; /* never below 16px — prevents iOS auto-zoom */
-  }
-
-  .phoneInput {
-    font-size: 1rem; /* never below 16px — prevents iOS auto-zoom */
+    font-size: 1rem;
   }
 
   .fieldLabel {
@@ -1012,6 +916,10 @@
     font-size: 0.875rem;
   }
 
+  .lineItemRow {
+    grid-template-columns: 1fr;
+  }
+
   .nextBtn,
   .submitBtn {
     padding: 0.75rem 2rem;
@@ -1027,10 +935,6 @@
     padding-left: 1rem;
   }
 
-  .thankYou {
-    padding: 3rem 1.5rem;
-  }
-
   .thankYouTitle {
     font-size: 1.75rem;
   }
@@ -1039,26 +943,14 @@
     font-size: 1rem;
   }
 
-  .uploadArea {
-    padding: 1.5rem 1rem;
-  }
-
   .fieldInput,
-  .fieldTextarea {    
-    font-size: 1rem; /* never below 16px — prevents iOS auto-zoom */
-  }
-
-  .phoneInput {
-    font-size: 1rem; /* never below 16px — prevents iOS auto-zoom */
+  .fieldTextarea {
+    font-size: 1rem;
   }
 
   .fieldLabel {
     font-size: 0.8125rem;
     margin-bottom: 0.5rem;
-  }
-
-  .guidanceCallout {
-    padding: 1rem 1.125rem;
   }
 
   .summarySectionHeader h3 {

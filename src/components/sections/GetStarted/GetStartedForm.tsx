@@ -614,12 +614,12 @@ const GetStartedForm = () => {
           className={`${styles.fieldInput} ${hasError ? styles.fieldInputError : ""}`}
           value={str(field)}
           onChange={(e) => updateField(field, e.target.value)}
-          onBlur={field === "email" ? () => {
+          onBlur={field !== "email" ? undefined : () => {
             const v = str("email");
             if (v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
               setValidationErrors(prev => new Set([...prev, "email"]));
             }
-          } : undefined}
+          }}
           placeholder={placeholder}
           maxLength={maxLength}
         />
@@ -654,7 +654,6 @@ const GetStartedForm = () => {
   };
 
   const renderSingleSelect = (field: string, label: string, options: { value: string; label: string }[], required = false) => {
-    const hasError = validationErrors.has(field);
     const shouldShake = shakeFields.has(field);
     return (
       <div id={`field-${field}`} className={`${styles.fieldGroup} ${shouldShake ? styles.shake : ""}`}>
@@ -678,7 +677,6 @@ const GetStartedForm = () => {
   };
 
   const renderMultiSelect = (field: string, label: string, options: { value: string; label: string }[], required = false) => {
-    const hasError = validationErrors.has(field);
     const shouldShake = shakeFields.has(field);
     return (
       <div id={`field-${field}`} className={`${styles.fieldGroup} ${shouldShake ? styles.shake : ""}`}>

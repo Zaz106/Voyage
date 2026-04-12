@@ -1,57 +1,7 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html {
-  height: 100%;
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-}
-
 /* Mobile First & Responsive Variables */
 :root {
-  --background: #111111;
-  --foreground: #ffffff;
+  --background: #f7f7f8;
+  --foreground: #000000;
 
   /* Font Families */
   --font-heading: "Satoshi", sans-serif;
@@ -72,7 +22,7 @@ a {
 
 /* Breakpoints Configuration */
 /* 
-   Mobile:  < 480px
+   Mobile:  < 480px (extreme mobile styles can be applied below 423px)
    Tablet:  481px - 768px
    Laptop:  769px - 1024px
    Desktop: > 1025px
@@ -118,7 +68,6 @@ a {
 }
 
 html {
-  scroll-behavior: smooth;
   font-size: 100%; /* Base 16px */
 }
 
@@ -163,6 +112,12 @@ a {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 @font-face {

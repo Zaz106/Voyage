@@ -1,0 +1,52 @@
+/* ══════════════════════════════════════
+   Floating PDF Download Button
+   ══════════════════════════════════════ */
+
+.fab {
+  position: fixed;
+  bottom: 2rem;
+  left: calc(50% - 22px);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  z-index: 50;
+}
+
+.fab:hover {
+  background: #2a2a2a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.fab:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  animation: spin 0.8s linear infinite;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .fab {
+    bottom: 1.25rem;
+    left: calc(50% - 20px);
+    width: 40px;
+    height: 40px;
+  }
+}
