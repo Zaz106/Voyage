@@ -76,6 +76,7 @@ export async function writeAll(invoices: InvoiceRecord[]): Promise<void> {
     access: "private",
     contentType: "application/json",
     addRandomSuffix: false,
+    allowOverwrite: true,
   });
   cachedBlobUrl = result.url; // keep cache in sync after write
 }

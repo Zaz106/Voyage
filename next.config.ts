@@ -29,6 +29,13 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Force Next.js to include the Chromium binary in the PDF serverless function bundle.
+  // Without this, Vercel strips the @sparticuz/chromium bin/ directory at build time.
+  outputFileTracingIncludes: {
+    "/api/invoices/pdf": [
+      "./node_modules/@sparticuz/chromium/bin/**/*",
+    ],
+  },
   async headers() {
     return [
       {
