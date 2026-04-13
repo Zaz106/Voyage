@@ -106,8 +106,8 @@
 /* ── Notes above table ── */
 .notesSection {
   margin-bottom: 1.75rem;
-  padding: 1rem 0;
-  background: #fafafa;
+  padding: 1rem 0.1rem;
+  background: #ffffff;
   border-radius: 8px;
 }
 
@@ -267,7 +267,7 @@
   }
 
   .card {
-    padding: 2rem 1.5rem 1.5rem;
+    padding: 4rem 2rem 3rem;
   }
 
   .title {
@@ -318,7 +318,7 @@
    ══════════════════════════════════════ */
 @media (max-width: 480px) {
   .card {
-    padding: 1.5rem 1rem 1.25rem;
+    padding: 4rem 1.25rem 3rem;
   }
 
   .title {

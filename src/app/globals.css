@@ -95,23 +95,22 @@ a {
   text-decoration: none;
 }
 
-/* Scrollbar Customization */
+/* Scrollbar Customization — light theme */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 5px;
-  border: 2px solid #0a0a0a; /* Creates padding effect */
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 100px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: rgba(0, 0, 0, 0.25);
 }
 
 ::-webkit-scrollbar-button {

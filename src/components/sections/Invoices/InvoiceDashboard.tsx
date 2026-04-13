@@ -67,7 +67,7 @@ export default function InvoiceDashboard() {
 
   const fetchInvoices = useCallback(async () => {
     try {
-      const res = await fetch("/api/invoices?list=true");
+      const res = await fetch("/api/invoices?list=true", { cache: "no-store" });
       if (res.ok) {
         const data = await res.json();
         setInvoices(data);
@@ -327,6 +327,7 @@ function StatusDropdown({ value, onChange, disabled }: { value: string; onChange
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState({ top: 0, left: 0 });
+  const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
 
   useEffect(() => {
     if (!open) return;
@@ -335,19 +336,16 @@ function StatusDropdown({ value, onChange, disabled }: { value: string; onChange
         setOpen(false);
       }
     };
-    const closeOnScroll = () => setOpen(false);
     document.addEventListener("mousedown", close);
-    window.addEventListener("scroll", closeOnScroll, true);
     return () => {
       document.removeEventListener("mousedown", close);
-      window.removeEventListener("scroll", closeOnScroll, true);
     };
   }, [open]);
 
-  const toggle = () => {
-    if (!open && wrapRef.current) {
+  const handleToggle = () => {
+    if (!open && wrapRef.current && window.innerWidth > 768) {
       const rect = wrapRef.current.getBoundingClientRect();
-      setPos({ top: rect.bottom + 4, left: rect.left });
+      setPos({ top: rect.bottom + 6, left: rect.left });
     }
     setOpen(o => !o);
   };
@@ -357,30 +355,42 @@ function StatusDropdown({ value, onChange, disabled }: { value: string; onChange
       <button
         type="button"
         className={`${styles.statusBadge} ${styles[`status_${value}`]}`}
-        onClick={toggle}
+        onClick={handleToggle}
         disabled={disabled}
       >
         {STATUS_LABELS[value] ?? value}
         <ChevronDown size={12} />
       </button>
-      {open && (
-        <div
-          className={styles.statusDropdown}
-          style={{ position: "fixed", top: pos.top, left: pos.left }}
-        >
-          {STATUS_OPTIONS.map(s => (
-            <button
-              key={s}
-              type="button"
-              className={`${styles.statusOption} ${s === value ? styles.statusOptionActive : ""}`}
-              onClick={() => { onChange(s); setOpen(false); }}
+
+      <AnimatePresence>
+        {open && (
+          <>
+            {/* Mobile overlay */}
+            <div className={styles.statusOverlay} onClick={() => setOpen(false)} />
+            <motion.div
+              className={styles.statusDropdown}
+              style={!isMobile ? { position: "fixed", top: pos.top, left: pos.left } : undefined}
+              initial={{ opacity: 0, y: isMobile ? 20 : 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: isMobile ? 20 : 4 }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
             >
-              <span className={`${styles.statusDot} ${styles[`dot_${s}`]}`} />
-              {STATUS_LABELS[s]}
-            </button>
-          ))}
-        </div>
-      )}
+              <span className={styles.statusDropdownLabel}>Set Status</span>
+              {STATUS_OPTIONS.map(s => (
+                <button
+                  key={s}
+                  type="button"
+                  className={`${styles.statusOption} ${s === value ? styles.statusOptionActive : ""}`}
+                  onClick={() => { onChange(s); setOpen(false); }}
+                >
+                  <span className={`${styles.statusDot} ${styles[`dot_${s}`]}`} />
+                  {STATUS_LABELS[s]}
+                </button>
+              ))}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

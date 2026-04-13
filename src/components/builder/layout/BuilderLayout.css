@@ -64,3 +64,25 @@
     top: 56px;
   }
 }
+
+/* ── Builder dark scrollbar (overrides global light scrollbar) ── */
+.builder-layout ::-webkit-scrollbar {
+  width: 8px;
+}
+
+.builder-layout ::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+.builder-layout ::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 100px;
+}
+
+.builder-layout ::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.builder-layout ::-webkit-scrollbar-button {
+  display: none;
+}

@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Check, X, Plus, Trash2, ArrowUp, AlertCircle } from "lucide-react";
+import { Check, X, Plus, Trash2, ArrowUp, AlertCircle, Copy } from "lucide-react";
 import DatePicker from "../../ui/DatePicker";
 import styles from "./InvoiceForm.module.css";
 
@@ -809,7 +809,8 @@ const InvoiceForm = () => {
                       className={styles.copyBtn}
                       onClick={() => navigator.clipboard.writeText(invoiceUrl)}
                     >
-                      Copy
+                      <Copy size={14} />
+                      <span className={styles.copyBtnLabel}>Copy</span>
                     </button>
                   </div>
                 )}

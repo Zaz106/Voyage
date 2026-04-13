@@ -65,18 +65,22 @@ export default function DatePicker({ value, onChange, placeholder = "Select date
   }, [value]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const prevMonth = useCallback(() => {
-    setViewMonth(prev => {
-      if (prev === 0) { setViewYear(y => y - 1); return 11; }
-      return prev - 1;
-    });
-  }, []);
+    if (viewMonth === 0) {
+      setViewMonth(11);
+      setViewYear(y => y - 1);
+    } else {
+      setViewMonth(m => m - 1);
+    }
+  }, [viewMonth]);
 
   const nextMonth = useCallback(() => {
-    setViewMonth(prev => {
-      if (prev === 11) { setViewYear(y => y + 1); return 0; }
-      return prev + 1;
-    });
-  }, []);
+    if (viewMonth === 11) {
+      setViewMonth(0);
+      setViewYear(y => y + 1);
+    } else {
+      setViewMonth(m => m + 1);
+    }
+  }, [viewMonth]);
 
   const selectDay = useCallback((day: number) => {
     const d = new Date(viewYear, viewMonth, day);

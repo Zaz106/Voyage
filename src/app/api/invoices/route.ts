@@ -2,21 +2,23 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { readAll, writeAll, withLock, type InvoiceRecord } from "@/lib/invoiceStorage";
 
+export const dynamic = "force-dynamic";
+
 // TODO: Authentication required before going live.
 // All invoice routes are currently unprotected. Add a session/JWT check
 // once an auth provider (e.g. NextAuth, Clerk) is integrated.
 
 async function getNextInvoiceNumber(): Promise<string> {
   const all = await readAll();
-  let maxNum = 0;
+  const usedNumbers = new Set<number>();
   for (const inv of all) {
     const match = String(inv.invoiceNumber ?? "").match(/INV-(\d+)/);
-    if (match) {
-      const num = parseInt(match[1], 10);
-      if (num > maxNum) maxNum = num;
-    }
+    if (match) usedNumbers.add(parseInt(match[1], 10));
   }
-  return `INV-${String(maxNum + 1).padStart(3, "0")}`;
+  /* Find the first available number starting from 1 */
+  let next = 1;
+  while (usedNumbers.has(next)) next++;
+  return `INV-${String(next).padStart(3, "0")}`;
 }
 
 /* ── POST — Create a new invoice ── */
@@ -77,9 +79,14 @@ export async function POST(request: NextRequest) {
 /* ── GET — single invoice, list, or next number ── */
 export async function GET(request: NextRequest) {
   try {
+    const noCacheHeaders = {
+      "Cache-Control": "no-store, no-cache, must-revalidate",
+      "Pragma": "no-cache",
+    };
+
     if (request.nextUrl.searchParams.get("nextNumber") === "true") {
       const num = await getNextInvoiceNumber();
-      return NextResponse.json({ invoiceNumber: num });
+      return NextResponse.json({ invoiceNumber: num }, { headers: noCacheHeaders });
     }
 
     if (request.nextUrl.searchParams.get("list") === "true") {
@@ -97,7 +104,7 @@ export async function GET(request: NextRequest) {
         status: inv.status ?? "sent",
         createdAt: inv.createdAt,
       }));
-      return NextResponse.json(summaries);
+      return NextResponse.json(summaries, { headers: noCacheHeaders });
     }
 
     const id = request.nextUrl.searchParams.get("id");
