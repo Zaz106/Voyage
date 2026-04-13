@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import fs from "fs/promises";
-import path from "path";
 import styles from "./page.module.css";
 import DownloadPdfButton from "@/components/ui/DownloadPdfButton";
+import { readAll } from "@/lib/invoiceStorage";
 
 /* ── Types ── */
 interface LineItem {
@@ -38,13 +37,10 @@ interface Invoice {
 }
 
 /* ── Helpers ── */
-const DATA_FILE = path.join(process.cwd(), "data", "invoices.json");
-
 async function getInvoice(id: string): Promise<Invoice | null> {
   try {
-    const raw = await fs.readFile(DATA_FILE, "utf-8");
-    const all = JSON.parse(raw) as Invoice[];
-    return all.find(inv => inv.id === id) ?? null;
+    const all = await readAll();
+    return (all.find(inv => inv.id === id) as unknown as Invoice) ?? null;
   } catch {
     return null;
   }

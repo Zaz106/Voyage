@@ -1,51 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs/promises";
-import path from "path";
 import crypto from "crypto";
-
-/* ══════════════════════════════════════
-   Invoice Storage — single shared JSON
-   ══════════════════════════════════════ */
+import { readAll, writeAll, withLock, type InvoiceRecord } from "@/lib/invoiceStorage";
 
 // TODO: Authentication required before going live.
 // All invoice routes are currently unprotected. Add a session/JWT check
 // once an auth provider (e.g. NextAuth, Clerk) is integrated.
-
-const DATA_FILE = path.join(process.cwd(), "data", "invoices.json");
-
-type InvoiceRecord = Record<string, unknown>;
-
-/* Simple async mutex — prevents concurrent write races on invoices.json.
-   If two requests arrive simultaneously the second waits for the first
-   to finish before reading/writing the file. */
-let writeLock: Promise<void> = Promise.resolve();
-
-async function withLock<T>(fn: () => Promise<T>): Promise<T> {
-  const current = writeLock;
-  let release!: () => void;
-  writeLock = new Promise<void>(res => { release = res; });
-  await current;
-  try {
-    return await fn();
-  } finally {
-    release();
-  }
-}
-
-async function readAll(): Promise<InvoiceRecord[]> {
-  try {
-    const raw = await fs.readFile(DATA_FILE, "utf-8");
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
-
-async function writeAll(invoices: InvoiceRecord[]): Promise<void> {
-  await fs.mkdir(path.dirname(DATA_FILE), { recursive: true });
-  await fs.writeFile(DATA_FILE, JSON.stringify(invoices, null, 2), "utf-8");
-}
 
 async function getNextInvoiceNumber(): Promise<string> {
   const all = await readAll();
