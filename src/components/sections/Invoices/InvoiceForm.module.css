@@ -136,8 +136,8 @@
   font-family: var(--font-heading);
   width: 100%;
   padding: 1rem 1.25rem;
-  background: #fafafa;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 12px;
   font-size: 1rem;
   color: #1a1a1a;
@@ -211,8 +211,8 @@
   font-family: var(--font-heading);
   width: 100%;
   padding: 0.875rem 1.125rem 1.75rem;
-  background: #fafafa;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 12px;
   font-size: 1rem;
   color: #1a1a1a;

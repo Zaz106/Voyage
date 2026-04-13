@@ -210,6 +210,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   // Block requests that don't come from a browser on the same origin.
   // Legitimate fetch() calls from the builder always include an Origin header;
   // raw curl/script attacks typically omit it.
+  // NOTE: origin.includes(host) uses substring matching. On a wildcard DNS setup
+  // a subdomain like "fake-api.example.com" could satisfy a host of "api.example.com".
+  // For the current single-domain deployment this is acceptable, but tighten to
+  // strict hostname equality if the domain configuration changes.
+  // NOTE (rate limiting): The in-memory rate limiter resets on server restarts
+  // and does not share state across multiple serverless instances (e.g. Vercel
+  // scale-out). Acceptable for the internal web-builder tool; revisit if exposed
+  // to external users or deployed with persistent concurrency.
   const origin = req.headers.get("origin");
   const host = req.headers.get("host");
   if (!origin || !host || !origin.includes(host.split(":")[0])) {

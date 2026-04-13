@@ -5,9 +5,9 @@ import { Resend } from "resend";
    Config
    ══════════════════════════════════════ */
 
-const COMPANY_NAME = "Company Name";
-const FROM_ADDRESS = `${COMPANY_NAME} <noreply@sixfootdesignco.co.za>`;
-const INTERNAL_EMAIL = "joshua.huisman06@gmail.com";
+const COMPANY_NAME = "Voyage Visuals";
+const FROM_ADDRESS = `${COMPANY_NAME} <noreply@voyagevisuals.co.za>`;
+const INTERNAL_EMAIL = "info@voyagevisuals.co.za";
 const ACCENT = "#987ed2";
 const MAX_ATTACHMENT_SIZE = 10 * 1024 * 1024; // 10 MB per file
 
@@ -859,6 +859,10 @@ function buildInternalEmail(data: BriefPayload): string {
    Route handler
    ══════════════════════════════════════ */
 
+// NOTE: If RESEND_API_KEY is missing from the environment, Resend will fail
+// silently or throw an opaque error. Add an explicit check here if the key
+// ever becomes optional or environment-specific:
+//   if (!process.env.RESEND_API_KEY) throw new Error("RESEND_API_KEY is not set");
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest) {

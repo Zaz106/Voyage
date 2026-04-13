@@ -113,11 +113,15 @@ const InvoiceForm = () => {
   const [shakeFields, setShakeFields] = useState<Set<string>>(new Set());
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [hasNavigated, setHasNavigated] = useState(false);
+  const [invoiceNumberLoading, setInvoiceNumberLoading] = useState(true);
 
   const formCardRef = useRef<HTMLDivElement>(null);
   const draftTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /* ── Load draft from localStorage ── */
+  // NOTE: Draft persistence includes paymentInstructions (bank details).
+  // These are shared transfer details for clients, not personal credentials,
+  // but if this changes revisit whether to exclude that field from storage.
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -156,6 +160,7 @@ const InvoiceForm = () => {
   /* ── Auto-generate sequential invoice number ── */
   useEffect(() => {
     if (!formData.invoiceNumber) {
+      setInvoiceNumberLoading(true);
       fetch("/api/invoices?nextNumber=true")
         .then(res => res.json())
         .then(data => {
@@ -166,7 +171,10 @@ const InvoiceForm = () => {
         .catch(() => {
           /* Fallback to timestamp-based if API fails */
           setFormData(prev => ({ ...prev, invoiceNumber: `INV-${String(Date.now()).slice(-6)}` }));
-        });
+        })
+        .finally(() => setInvoiceNumberLoading(false));
+    } else {
+      setInvoiceNumberLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -272,6 +280,17 @@ const InvoiceForm = () => {
       setValidationErrors(errors);
       setShakeFields(new Set(errors));
       setTimeout(() => setShakeFields(new Set()), 400);
+      const firstErrorField = requiredFields.find(f => errors.has(f)) ?? Array.from(errors)[0];
+      if (firstErrorField) {
+        setTimeout(() => {
+          const el = document.getElementById(`field-${firstErrorField}`);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            const centeredTop = rect.top + window.scrollY - window.innerHeight / 2 + rect.height / 2;
+            window.scrollTo({ top: Math.max(0, centeredTop), behavior: "smooth" });
+          }
+        }, 50);
+      }
       return false;
     }
     setValidationErrors(new Set());
@@ -364,6 +383,7 @@ const InvoiceForm = () => {
     setShakeFields(new Set());
     setInvoiceUrl("");
     /* Fetch next sequential number */
+    setInvoiceNumberLoading(true);
     fetch("/api/invoices?nextNumber=true")
       .then(res => res.json())
       .then(data => {
@@ -371,7 +391,8 @@ const InvoiceForm = () => {
       })
       .catch(() => {
         setFormData(prev => ({ ...prev, invoiceNumber: `INV-${String(Date.now()).slice(-6)}` }));
-      });
+      })
+      .finally(() => setInvoiceNumberLoading(false));
     scrollToForm();
   };
 
@@ -493,7 +514,7 @@ const InvoiceForm = () => {
   const renderInvoiceDetails = () => (
     <div className={styles.stepFields}>
       <div className={styles.fieldRow}>
-        {renderTextField("invoiceNumber", "Invoice number", "e.g. INV-001", true)}
+        {renderTextField("invoiceNumber", "Invoice number", invoiceNumberLoading ? "Generating…" : "e.g. INV-001", true)}
         {renderSingleSelect("currency", "Currency", [
           { value: "ZAR", label: "ZAR (R)" },
           { value: "USD", label: "USD ($)" },

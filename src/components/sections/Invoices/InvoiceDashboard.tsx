@@ -127,24 +127,39 @@ export default function InvoiceDashboard() {
   });
 
   /* Stats */
-  const totalOutstanding = invoices
+  /* Stats — group by currency so multi-currency totals are correct */
+  const outstandingByCurrency = invoices
     .filter(inv => inv.status === "sent" || inv.status === "overdue")
-    .reduce((sum, inv) => sum + inv.total, 0);
-  const totalPaid = invoices
+    .reduce<Record<string, number>>((acc, inv) => {
+      acc[inv.currency] = (acc[inv.currency] ?? 0) + inv.total;
+      return acc;
+    }, {});
+
+  const paidByCurrency = invoices
     .filter(inv => inv.status === "paid")
-    .reduce((sum, inv) => sum + inv.total, 0);
+    .reduce<Record<string, number>>((acc, inv) => {
+      acc[inv.currency] = (acc[inv.currency] ?? 0) + inv.total;
+      return acc;
+    }, {});
+
+  /** Render grouped currency totals, e.g. "R 1 200,00 · $300.00" */
+  function fmtGrouped(byCurrency: Record<string, number>) {
+    const entries = Object.entries(byCurrency);
+    if (entries.length === 0) return fmt(0, "ZAR");
+    return entries.map(([cur, amt]) => fmt(amt, cur)).join(" · ");
+  }
 
   return (
     <section className={styles.dashboard}>
       {/* Header */}
       <div className={styles.header}>
-        <div>
+        <div className={styles.headerText}>
           <h1 className={styles.title}>Invoices</h1>
           <p className={styles.subtitle}>Manage and track all your invoices.</p>
         </div>
         <Link href="/invoices" className={styles.createBtn}>
-          <Plus size={18} />
-          New Invoice
+          <Plus size={16} />
+          <span className={styles.createBtnLabel}>New Invoice</span>
         </Link>
       </div>
 
@@ -156,11 +171,11 @@ export default function InvoiceDashboard() {
         </div>
         <div className={styles.statCard}>
           <span className={styles.statLabel}>Outstanding</span>
-          <span className={styles.statValue}>{fmt(totalOutstanding, "ZAR")}</span>
+          <span className={styles.statValue}>{fmtGrouped(outstandingByCurrency)}</span>
         </div>
         <div className={styles.statCard}>
           <span className={styles.statLabel}>Paid</span>
-          <span className={styles.statValue}>{fmt(totalPaid, "ZAR")}</span>
+          <span className={styles.statValue}>{fmtGrouped(paidByCurrency)}</span>
         </div>
       </div>
 

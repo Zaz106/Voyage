@@ -5,7 +5,7 @@
 
 /* Outer wrapper — centers the A4 sheet on screen */
 .page {
-  background: #e8e8e8;
+  background: var(--background);
   display: flex;
   justify-content: center;
   padding: 2.5rem 1rem;

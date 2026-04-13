@@ -10,7 +10,7 @@ const InvoiceHero = () => {
           alt="Hero Image"
           fill
           sizes="100vw"
-          style={{ objectFit: "cover", objectPosition: "top" }}
+          style={{ objectFit: "cover", objectPosition: "center" }}
           priority
         />
       </div>

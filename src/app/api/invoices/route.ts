@@ -4,32 +4,58 @@ import path from "path";
 import crypto from "crypto";
 
 /* ══════════════════════════════════════
-   Invoice Storage — file-based JSON
+   Invoice Storage — single shared JSON
    ══════════════════════════════════════ */
 
-const DATA_DIR = path.join(process.cwd(), "data", "invoices");
+// TODO: Authentication required before going live.
+// All invoice routes are currently unprotected. Add a session/JWT check
+// once an auth provider (e.g. NextAuth, Clerk) is integrated.
 
-/** Ensure the data directory exists */
-async function ensureDir() {
-  await fs.mkdir(DATA_DIR, { recursive: true });
+const DATA_FILE = path.join(process.cwd(), "data", "invoices.json");
+
+type InvoiceRecord = Record<string, unknown>;
+
+/* Simple async mutex — prevents concurrent write races on invoices.json.
+   If two requests arrive simultaneously the second waits for the first
+   to finish before reading/writing the file. */
+let writeLock: Promise<void> = Promise.resolve();
+
+async function withLock<T>(fn: () => Promise<T>): Promise<T> {
+  const current = writeLock;
+  let release!: () => void;
+  writeLock = new Promise<void>(res => { release = res; });
+  await current;
+  try {
+    return await fn();
+  } finally {
+    release();
+  }
 }
 
-/** Get the next sequential invoice number based on existing invoices */
+async function readAll(): Promise<InvoiceRecord[]> {
+  try {
+    const raw = await fs.readFile(DATA_FILE, "utf-8");
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+async function writeAll(invoices: InvoiceRecord[]): Promise<void> {
+  await fs.mkdir(path.dirname(DATA_FILE), { recursive: true });
+  await fs.writeFile(DATA_FILE, JSON.stringify(invoices, null, 2), "utf-8");
+}
+
 async function getNextInvoiceNumber(): Promise<string> {
-  await ensureDir();
-  const files = await fs.readdir(DATA_DIR);
+  const all = await readAll();
   let maxNum = 0;
-  for (const file of files) {
-    if (!file.endsWith(".json") || file === "counter.json") continue;
-    try {
-      const raw = await fs.readFile(path.join(DATA_DIR, file), "utf-8");
-      const inv = JSON.parse(raw);
-      const match = inv.invoiceNumber?.match(/INV-(\d+)/);
-      if (match) {
-        const num = parseInt(match[1], 10);
-        if (num > maxNum) maxNum = num;
-      }
-    } catch { /* skip */ }
+  for (const inv of all) {
+    const match = String(inv.invoiceNumber ?? "").match(/INV-(\d+)/);
+    if (match) {
+      const num = parseInt(match[1], 10);
+      if (num > maxNum) maxNum = num;
+    }
   }
   return `INV-${String(maxNum + 1).padStart(3, "0")}`;
 }
@@ -39,12 +65,10 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    /* Basic validation */
     if (!body.clientName || !body.clientEmail || !body.invoiceNumber) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    /* Sanitise line items */
     const lineItems = Array.isArray(body.lineItems)
       ? body.lineItems.map((li: Record<string, unknown>) => ({
           description: String(li.description ?? ""),
@@ -54,7 +78,7 @@ export async function POST(request: NextRequest) {
       : [];
 
     const id = crypto.randomUUID();
-    const invoice = {
+    const invoice: InvoiceRecord = {
       id,
       createdAt: new Date().toISOString(),
       status: "sent",
@@ -80,9 +104,9 @@ export async function POST(request: NextRequest) {
       total: Number(body.total ?? 0),
     };
 
-    await ensureDir();
-    const filePath = path.join(DATA_DIR, `${id}.json`);
-    await fs.writeFile(filePath, JSON.stringify(invoice, null, 2), "utf-8");
+    const all = await readAll();
+    all.unshift(invoice); // newest first
+    await withLock(() => writeAll(all));
 
     return NextResponse.json({ id }, { status: 201 });
   } catch (err) {
@@ -91,43 +115,30 @@ export async function POST(request: NextRequest) {
   }
 }
 
-/* ── GET — Retrieve a single invoice by ?id=, list all by ?list=true, or next number by ?nextNumber=true ── */
+/* ── GET — single invoice, list, or next number ── */
 export async function GET(request: NextRequest) {
   try {
-    /* Next invoice number */
     if (request.nextUrl.searchParams.get("nextNumber") === "true") {
       const num = await getNextInvoiceNumber();
       return NextResponse.json({ invoiceNumber: num });
     }
 
-    /* List all invoices (for dashboard) */
     if (request.nextUrl.searchParams.get("list") === "true") {
-      await ensureDir();
-      const files = await fs.readdir(DATA_DIR);
-      const invoices = [];
-      for (const file of files) {
-        if (!file.endsWith(".json") || file === "counter.json") continue;
-        try {
-          const raw = await fs.readFile(path.join(DATA_DIR, file), "utf-8");
-          const inv = JSON.parse(raw);
-          invoices.push({
-            id: inv.id,
-            invoiceNumber: inv.invoiceNumber,
-            clientName: inv.clientName,
-            clientCompany: inv.clientCompany,
-            clientEmail: inv.clientEmail,
-            total: inv.total,
-            currency: inv.currency,
-            issueDate: inv.issueDate,
-            dueDate: inv.dueDate,
-            status: inv.status ?? "sent",
-            createdAt: inv.createdAt,
-          });
-        } catch { /* skip corrupt files */ }
-      }
-      /* Sort by createdAt descending */
-      invoices.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-      return NextResponse.json(invoices);
+      const all = await readAll();
+      const summaries = all.map(inv => ({
+        id: inv.id,
+        invoiceNumber: inv.invoiceNumber,
+        clientName: inv.clientName,
+        clientCompany: inv.clientCompany,
+        clientEmail: inv.clientEmail,
+        total: inv.total,
+        currency: inv.currency,
+        issueDate: inv.issueDate,
+        dueDate: inv.dueDate,
+        status: inv.status ?? "sent",
+        createdAt: inv.createdAt,
+      }));
+      return NextResponse.json(summaries);
     }
 
     const id = request.nextUrl.searchParams.get("id");
@@ -135,16 +146,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Missing id parameter" }, { status: 400 });
     }
 
-    /* Prevent path traversal */
-    const safeId = path.basename(id);
-    const filePath = path.join(DATA_DIR, `${safeId}.json`);
-
-    try {
-      const raw = await fs.readFile(filePath, "utf-8");
-      return NextResponse.json(JSON.parse(raw));
-    } catch {
+    const all = await readAll();
+    const invoice = all.find(inv => inv.id === id);
+    if (!invoice) {
       return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
     }
+    return NextResponse.json(invoice);
   } catch (err) {
     console.error("Failed to fetch invoice:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
@@ -166,19 +173,14 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "Invalid status" }, { status: 400 });
     }
 
-    const safeId = path.basename(id);
-    const filePath = path.join(DATA_DIR, `${safeId}.json`);
-
-    let invoice;
-    try {
-      const raw = await fs.readFile(filePath, "utf-8");
-      invoice = JSON.parse(raw);
-    } catch {
+    const all = await readAll();
+    const idx = all.findIndex(inv => inv.id === id);
+    if (idx === -1) {
       return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
     }
 
-    invoice.status = status;
-    await fs.writeFile(filePath, JSON.stringify(invoice, null, 2), "utf-8");
+    all[idx] = { ...all[idx], status };
+    await withLock(() => writeAll(all));
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("Failed to update invoice:", err);
@@ -194,16 +196,13 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Missing id parameter" }, { status: 400 });
     }
 
-    const safeId = path.basename(id);
-    const filePath = path.join(DATA_DIR, `${safeId}.json`);
-
-    try {
-      await fs.access(filePath);
-    } catch {
+    const all = await readAll();
+    const filtered = all.filter(inv => inv.id !== id);
+    if (filtered.length === all.length) {
       return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
     }
 
-    await fs.unlink(filePath);
+    await withLock(() => writeAll(filtered));
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("Failed to delete invoice:", err);

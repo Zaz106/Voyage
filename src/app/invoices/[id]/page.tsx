@@ -38,14 +38,13 @@ interface Invoice {
 }
 
 /* ── Helpers ── */
-const DATA_DIR = path.join(process.cwd(), "data", "invoices");
+const DATA_FILE = path.join(process.cwd(), "data", "invoices.json");
 
 async function getInvoice(id: string): Promise<Invoice | null> {
   try {
-    const safeId = path.basename(id);
-    const filePath = path.join(DATA_DIR, `${safeId}.json`);
-    const raw = await fs.readFile(filePath, "utf-8");
-    return JSON.parse(raw) as Invoice;
+    const raw = await fs.readFile(DATA_FILE, "utf-8");
+    const all = JSON.parse(raw) as Invoice[];
+    return all.find(inv => inv.id === id) ?? null;
   } catch {
     return null;
   }
