@@ -1,31 +1,21 @@
 /**
- * invoiceStorage.ts
+ * invoiceStorage.ts — Vercel Blob storage for invoices
  *
- * Unified invoice storage layer:
- *   - Development  → local file at data/invoices.json
- *   - Production   → Vercel Blob Storage (persistent, shared across instances)
- *
- * Setup (one-time, production only):
- *   1. Vercel Dashboard → Storage → Create Blob Store → Connect to this project
- *   2. Vercel automatically adds BLOB_READ_WRITE_TOKEN to your project env vars
- *   3. Pull the updated env: `vercel env pull .env.local`
+ * All environments (local dev + production) use Vercel Blob.
+ * Requires BLOB_READ_WRITE_TOKEN in your environment:
+ *   - Production/Preview: set automatically when you connect the Blob store in the Vercel dashboard
+ *   - Local dev: run `vercel env pull .env.local` after connecting the store
  */
 
-import fs from "fs/promises";
-import path from "path";
+import { put, list, del } from "@vercel/blob";
 
 export type InvoiceRecord = Record<string, unknown>;
 
-/* ── Local file path (dev only) ── */
-const DATA_FILE = path.join(process.cwd(), "data", "invoices.json");
-
-/* ── Blob pathname (prod only) — deterministic so it can be overwritten ── */
+/* ── Blob pathname — deterministic, single source of truth ── */
 const BLOB_PATHNAME = "invoices.json";
 
 /* ── In-process write mutex ──────────────────────────────────────────────────
-   Prevents concurrent read-modify-write races within a single instance.
-   Note: does NOT guard against races across multiple serverless instances,
-   but is still worthwhile protection for bursts on a single cold-start. */
+   Serialises concurrent writes within a single server instance. */
 let writeLock: Promise<void> = Promise.resolve();
 
 export async function withLock<T>(fn: () => Promise<T>): Promise<T> {
@@ -42,23 +32,12 @@ export async function withLock<T>(fn: () => Promise<T>): Promise<T> {
 
 /* ── Read all invoices ── */
 export async function readAll(): Promise<InvoiceRecord[]> {
-  if (process.env.NODE_ENV !== "production") {
-    try {
-      const raw = await fs.readFile(DATA_FILE, "utf-8");
-      const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
-    }
-  }
-
-  /* Production: fetch from Vercel Blob */
   try {
-    const { list } = await import("@vercel/blob");
     const { blobs } = await list({ prefix: BLOB_PATHNAME });
     const blob = blobs.find(b => b.pathname === BLOB_PATHNAME);
     if (!blob) return [];
-    const res = await fetch(blob.url, { cache: "no-store" });
+    // downloadUrl carries auth for private blobs
+    const res = await fetch(blob.downloadUrl, { cache: "no-store" });
     if (!res.ok) return [];
     const data = await res.json();
     return Array.isArray(data) ? data : [];
@@ -69,17 +48,18 @@ export async function readAll(): Promise<InvoiceRecord[]> {
 
 /* ── Write all invoices ── */
 export async function writeAll(invoices: InvoiceRecord[]): Promise<void> {
-  if (process.env.NODE_ENV !== "production") {
-    await fs.mkdir(path.dirname(DATA_FILE), { recursive: true });
-    await fs.writeFile(DATA_FILE, JSON.stringify(invoices, null, 2), "utf-8");
-    return;
-  }
+  // Capture any existing blobs before writing so we can clean them up
+  const { blobs } = await list({ prefix: BLOB_PATHNAME });
+  const existing = blobs.filter(b => b.pathname === BLOB_PATHNAME);
 
-  /* Production: upload to Vercel Blob, overwriting the same pathname */
-  const { put } = await import("@vercel/blob");
   await put(BLOB_PATHNAME, JSON.stringify(invoices, null, 2), {
-    access: "public",
+    access: "private",
     contentType: "application/json",
     addRandomSuffix: false,
   });
+
+  // Remove stale blobs (handles edge case where multiple old versions accumulated)
+  if (existing.length > 0) {
+    await del(existing.map(b => b.url));
+  }
 }
