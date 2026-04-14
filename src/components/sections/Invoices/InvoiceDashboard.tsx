@@ -65,6 +65,12 @@ export default function InvoiceDashboard() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<InvoiceSummary | null>(null);
 
+  /* Prevent Safari rubber-band scroll bounce on this page */
+  useEffect(() => {
+    document.body.style.overscrollBehaviorY = "none";
+    return () => { document.body.style.overscrollBehaviorY = ""; };
+  }, []);
+
   const fetchInvoices = useCallback(async () => {
     try {
       const res = await fetch("/api/invoices?list=true", { cache: "no-store" });
@@ -207,8 +213,31 @@ export default function InvoiceDashboard() {
 
       {/* Table */}
       {loading ? (
-        <div className={styles.empty}>
-          <p className={styles.emptyText}>Loading invoices...</p>
+        <div className={styles.tableWrap}>
+          <div className={styles.tableHeader}>
+            <span className={styles.colInv}>Invoice</span>
+            <span className={styles.colClient}>Client</span>
+            <span className={styles.colDate}>Date</span>
+            <span className={styles.colAmount}>Amount</span>
+            <span className={styles.colStatus}>Status</span>
+            <span className={styles.colActions}></span>
+          </div>
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className={`${styles.tableRow} ${styles.skeletonRow}`}>
+              <span className={styles.colInv}><span className={`${styles.skeleton} ${styles.skeletonShort}`} /></span>
+              <span className={styles.colClient}>
+                <span className={`${styles.skeleton} ${styles.skeletonMed}`} />
+                <span className={`${styles.skeleton} ${styles.skeletonShort}`} style={{ marginTop: "0.25rem" }} />
+              </span>
+              <span className={styles.colDate}><span className={`${styles.skeleton} ${styles.skeletonMed}`} /></span>
+              <span className={styles.colAmount}><span className={`${styles.skeleton} ${styles.skeletonShort}`} /></span>
+              <span className={styles.colStatus}><span className={`${styles.skeleton} ${styles.skeletonBadge}`} /></span>
+              <span className={styles.colActions}>
+                <span className={`${styles.skeleton} ${styles.skeletonIcon}`} />
+                <span className={`${styles.skeleton} ${styles.skeletonIcon}`} />
+              </span>
+            </div>
+          ))}
         </div>
       ) : filtered.length === 0 ? (
         <div className={styles.empty}>
@@ -216,8 +245,16 @@ export default function InvoiceDashboard() {
           <p className={styles.emptyText}>
             {invoices.length === 0 ? "No invoices yet." : "No invoices match your search."}
           </p>
-          {invoices.length === 0 && (
+          {invoices.length === 0 ? (
             <Link href="/invoices" className={styles.emptyLink}>Create your first invoice</Link>
+          ) : (
+            <button
+              type="button"
+              className={styles.clearSearchBtn}
+              onClick={() => { setSearch(""); setFilterStatus("all"); }}
+            >
+              Clear search
+            </button>
           )}
         </div>
       ) : (
@@ -336,9 +373,12 @@ function StatusDropdown({ value, onChange, disabled }: { value: string; onChange
         setOpen(false);
       }
     };
+    const closeOnScroll = () => setOpen(false);
     document.addEventListener("mousedown", close);
+    window.addEventListener("scroll", closeOnScroll, { passive: true });
     return () => {
       document.removeEventListener("mousedown", close);
+      window.removeEventListener("scroll", closeOnScroll);
     };
   }, [open]);
 

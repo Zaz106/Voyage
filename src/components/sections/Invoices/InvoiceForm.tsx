@@ -114,6 +114,7 @@ const InvoiceForm = () => {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [hasNavigated, setHasNavigated] = useState(false);
   const [invoiceNumberLoading, setInvoiceNumberLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   const formCardRef = useRef<HTMLDivElement>(null);
   const draftTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -806,11 +807,17 @@ const InvoiceForm = () => {
                     <input type="text" readOnly value={invoiceUrl} className={styles.invoiceLinkInput} onClick={e => (e.target as HTMLInputElement).select()} />
                     <button
                       type="button"
-                      className={styles.copyBtn}
-                      onClick={() => navigator.clipboard.writeText(invoiceUrl)}
+                      className={`${styles.copyBtn} ${copied ? styles.copyBtnCopied : ""}`}
+                      onClick={() => {
+                        navigator.clipboard.writeText(invoiceUrl).then(() => {
+                          setCopied(true);
+                          setTimeout(() => setCopied(false), 2000);
+                        });
+                      }}
                     >
-                      <Copy size={14} />
-                      <span className={styles.copyBtnLabel}>Copy</span>
+                      <Check size={14} className={copied ? styles.copyCheckVisible : styles.copyCheckHidden} />
+                      <Copy size={14} className={copied ? styles.copyIconHidden : styles.copyIconVisible} />
+                      <span className={styles.copyBtnLabel}>{copied ? "Copied!" : "Copy"}</span>
                     </button>
                   </div>
                 )}
@@ -868,7 +875,11 @@ const InvoiceForm = () => {
             )}
             {isReviewStep ? (
               <button type="button" className={styles.submitBtn} onClick={handleSubmit} disabled={isSubmitting}>
-                {isSubmitting ? "Saving…" : "Generate Invoice"}
+                {isSubmitting ? (
+                  <span className={styles.loadingDots}>
+                    <span /><span /><span />
+                  </span>
+                ) : "Generate Invoice"}
                 {!isSubmitting && <Check size={0} />}
               </button>
             ) : (

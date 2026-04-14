@@ -150,9 +150,9 @@ function buildInvoiceHtml(inv: Invoice): string {
         <p class="footer-text">${inv.paymentInstructions ? escapeHtml(inv.paymentInstructions) : "Contact us for payment details."}</p>
       </div>
       <div class="footer-col">
-        <h3 class="footer-heading">Voyage Visuals</h3>
-        <p class="footer-text">+27 78 746 2628</p>
-        <p class="footer-text">info@voyagevisuals.co.za</p>
+        <h3 class="footer-heading">${escapeHtml(process.env.BUSINESS_NAME ?? "Voyage Visuals")}</h3>
+        <p class="footer-text">${escapeHtml(process.env.BUSINESS_PHONE ?? "+27 78 746 2628")}</p>
+        <p class="footer-text">${escapeHtml(process.env.BUSINESS_EMAIL ?? "info@voyagevisuals.co.za")}</p>
       </div>
     </div>
   </div>

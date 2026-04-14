@@ -318,7 +318,7 @@
    ══════════════════════════════════════ */
 @media (max-width: 480px) {
   .card {
-    padding: 4rem 1.25rem 3rem;
+    padding: 4rem 1.75rem 3rem;
   }
 
   .title {
@@ -346,7 +346,7 @@
   }
 
   .footerBar {
-    padding: 1.25rem 1rem;
+    padding: 1.25rem 1.75rem;
   }
 
   .footerHeading {

@@ -493,6 +493,42 @@
   text-underline-offset: 3px;
 }
 
+.clearSearchBtn {
+  font-family: var(--font-heading);
+  font-size: 0.9375rem;
+  color: #ffffff;
+  background: #1a1a1a;
+  border: none;
+  border-radius: 999px;
+  padding: 0.625rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.clearSearchBtn:hover {
+  background: #2a2a2a;
+}
+
+/* ── Loading skeletons ── */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton {
+  display: block;
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgba(0,0,0,0.06) 25%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.06) 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.skeletonShort { width: 70px; height: 14px; }
+.skeletonMed { width: 120px; height: 14px; }
+.skeletonBadge { width: 60px; height: 24px; border-radius: 999px; }
+.skeletonIcon { width: 28px; height: 28px; border-radius: 8px; }
+.skeletonRow { pointer-events: none; }
+
 /* ══════════════════════════════════════
    Responsive — 1024px
    ══════════════════════════════════════ */

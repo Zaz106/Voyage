@@ -38,6 +38,21 @@ export async function POST(request: NextRequest) {
         }))
       : [];
 
+    /* Recalculate totals server-side from line items — never trust client values */
+    const subtotal = lineItems.reduce((sum: number, li: { description: string; quantity: string; rate: string }) => {
+      return sum + (parseFloat(li.quantity) || 0) * (parseFloat(li.rate) || 0);
+    }, 0);
+
+    const discountType = String(body.discountType ?? "none");
+    const discountValue = parseFloat(String(body.discountValue ?? "0")) || 0;
+    let discountAmount = 0;
+    if (discountType === "percentage") discountAmount = subtotal * (discountValue / 100);
+    else if (discountType === "fixed") discountAmount = Math.min(discountValue, subtotal);
+
+    const taxRate = parseFloat(String(body.taxRate ?? "0")) || 0;
+    const taxAmount = (subtotal - discountAmount) * (taxRate / 100);
+    const total = subtotal - discountAmount + taxAmount;
+
     const id = crypto.randomUUID();
     const invoice: InvoiceRecord = {
       id,
@@ -55,14 +70,14 @@ export async function POST(request: NextRequest) {
       paymentTerms: String(body.paymentTerms ?? ""),
       lineItems,
       taxRate: String(body.taxRate ?? "0"),
-      discountType: String(body.discountType ?? "none"),
+      discountType,
       discountValue: String(body.discountValue ?? "0"),
       notes: String(body.notes ?? ""),
       paymentInstructions: String(body.paymentInstructions ?? ""),
-      subtotal: Number(body.subtotal ?? 0),
-      discountAmount: Number(body.discountAmount ?? 0),
-      taxAmount: Number(body.taxAmount ?? 0),
-      total: Number(body.total ?? 0),
+      subtotal,
+      discountAmount,
+      taxAmount,
+      total,
     };
 
     const all = await readAll();
