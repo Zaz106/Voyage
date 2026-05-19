@@ -1,0 +1,103 @@
+/* ══════════════════════════════════════
+   AboutSection — Our Story
+   ══════════════════════════════════════ */
+
+.about {
+  width: 100%;
+  background: var(--background);
+  color: var(--foreground);
+  padding: 8rem clamp(1rem, 5vw, 4rem) 4rem;
+}
+
+.inner {
+  max-width: min(1200px, 100%);
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+/* ── Eyebrow label ── */
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: clamp(0.65rem, 1.2vw, 0.85rem);
+  font-weight: 500;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+/* ── Paragraph ── */
+.paragraph {
+  font-family: var(--font-body);
+  font-size: clamp(1.15rem, 3.2vw, 2.5rem);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+  max-width: min(1200px, 100%);
+  text-align: center;
+}
+
+/* Each word is an inline span driven by GSAP opacity */
+.word {
+  display: inline;
+  white-space: pre-wrap;
+  will-change: opacity;
+}
+
+/* ══════════════════════════════════════
+   Responsive
+   ══════════════════════════════════════ */
+
+/* ── Large desktop (1440+) ── */
+@media (min-width: 1440px) {
+  .about {
+    padding: 10rem clamp(2rem, 8vw, 6rem) 8rem;
+  }
+}
+
+/* ── Tablet landscape / small desktop (769–1024) ── */
+@media (max-width: 1024px) {
+  .about {
+    padding: 7rem clamp(1.25rem, 4vw, 3rem) 4rem;
+  }
+
+  .inner {
+    gap: 1.1rem;
+  }
+}
+
+/* ── Tablet portrait (481–768) ── */
+@media (max-width: 768px) {
+  .about {
+    padding: 6rem 1.5rem 8rem;
+  }
+
+  .inner {
+    gap: 1rem;
+  }
+}
+
+/* ── Large mobile (361–480) ── */
+@media (max-width: 480px) {
+  .about {
+    padding: 5rem 1.25rem 7rem;
+  }
+
+  .inner {
+    gap: 0.9rem;
+  }
+}
+
+/* ── Small mobile (360 and below) ── */
+@media (max-width: 360px) {
+  .about {
+    padding: 4rem 1rem 6rem;
+  }
+
+  .inner {
+    gap: 0.85rem;
+  }
+}

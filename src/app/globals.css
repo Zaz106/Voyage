@@ -1,124 +1,9 @@
-/* Mobile First & Responsive Variables */
-:root {
-  --background: #f7f7f8;
-  --foreground: #000000;
+/* ══════════════════════════════════════
+   Voyage — Global Stylesheet
+   Dark website theme
+   ══════════════════════════════════════ */
 
-  /* Font Families */
-  --font-heading: "Satoshi", sans-serif;
-  --font-body: "Instrument Sans", sans-serif;
-
-  /* Font Sizes - Desktop Reference */
-  --h1-size: 8rem; /* 128px */
-  --h2-size: 5.5rem; /* 96px */
-  --h3-size: 3rem; /* 48px */
-  --text-lg: 1.5rem; /* 24px */
-  --text-base: 1.125rem; /* 18px */
-  --text-sm: 0.875rem; /* 14px */
-
-  /* Colors */
-  --accent: #987ed2;
-  --border: rgba(255, 255, 255, 0.1);
-}
-
-/* Breakpoints Configuration */
-/* 
-   Mobile:  < 480px (extreme mobile styles can be applied below 423px)
-   Tablet:  481px - 768px
-   Laptop:  769px - 1024px
-   Desktop: > 1025px
-*/
-
-@media (max-width: 1280px) {
-  :root {
-    --h1-size: 5.5rem;
-    --h2-size: 4.5rem;
-  }
-}
-
-@media (max-width: 1024px) {
-  :root {
-    --h1-size: 5rem;
-    --h2-size: 4rem;
-    --h3-size: 2.5rem;
-  }
-}
-
-@media (max-width: 768px) {
-  :root {
-    --h1-size: 4.5rem;
-    --h2-size: 3.5rem;
-    --h3-size: 2rem;
-    --text-lg: 1.25rem;
-    --text-base: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  :root {
-    --h1-size: 3.75rem;
-    --h2-size: 3rem;
-    --h3-size: 1.75rem;
-  }
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-html {
-  font-size: 100%; /* Base 16px */
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: var(--font-body);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden; /* Prevent horizontal scroll */
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-heading);
-  line-height: 1.1;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-/* Scrollbar Customization — light theme */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.12);
-  border-radius: 100px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.25);
-}
-
-::-webkit-scrollbar-button {
-  display: none;
-  width: 0;
-  height: 0;
-}
-
+/* ── Font Faces ── */
 @font-face {
   font-family: "Satoshi";
   src: url("/fonts/Satoshi-Light.otf") format("opentype");
@@ -166,4 +51,117 @@ a {
   font-style: normal;
   font-display: swap;
 }
+
+/* ── Design Tokens ── */
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+
+  /* Font families */
+  --font-heading: "Satoshi", sans-serif;
+  --font-body: "Instrument Sans", sans-serif;
+
+  /* Font sizes — desktop */
+  --h1-size: 8rem;
+  --h2-size: 5.5rem;
+  --h3-size: 3rem;
+  --text-lg: 1.5rem;
+  --text-base: 1.125rem;
+  --text-sm: 0.875rem;
+
+  /* Brand */
+  --accent: #a4dbe8;
+  --border: rgba(0, 0, 0, 0.1);
+}
+
+/* ── Responsive type scale ── */
+@media (max-width: 1280px) {
+  :root {
+    --h1-size: 5.5rem;
+    --h2-size: 4.5rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --h1-size: 5rem;
+    --h2-size: 4rem;
+    --h3-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --h1-size: 4.5rem;
+    --h2-size: 3.5rem;
+    --h3-size: 2rem;
+    --text-lg: 1.25rem;
+    --text-base: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --h1-size: 3.75rem;
+    --h2-size: 3rem;
+    --h3-size: 1.75rem;
+  }
+}
+
+/* ── Reset ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  font-size: 100%;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  line-height: 1.1;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 

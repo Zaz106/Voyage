@@ -1,0 +1,43 @@
+/* ══════════════════════════════════════
+   Accessory Pages — Light Theme Override
+   Applied via nested layouts for:
+     /get-started, /invoices, /web-builder
+   ══════════════════════════════════════ */
+
+/* Override the dark website tokens with light equivalents */
+:root {
+  --background: #f7f7f8;
+  --foreground: #000000;
+  --border: rgba(0, 0, 0, 0.1);
+}
+
+/* Override body colours */
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Light scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+

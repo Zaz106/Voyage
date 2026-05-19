@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Instrument_Sans, Alex_Brush } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next"
+import ClickSpark from "@/components/ui/ClickSpark";
+import PageLoader from "@/components/ui/PageLoader";
 import "./globals.css";
 
 // Instrument Sans is variable by default, ensuring all weights 400-700 are available
@@ -29,8 +31,15 @@ export default function RootLayout({
 }>) {
   return (
    <html lang="en" data-scroll-behavior="smooth" className={`${instrumentSans.variable} ${alexBrush.variable}`}>
-      <body>{children}
-      <Analytics />
+      <head>
+        <link rel="preload" href="/videos/clouds.mp4" as="video" type="video/mp4" />
+      </head>
+      <body>
+        <PageLoader />
+        <ClickSpark sparkColor="#ffffff" autoColor sparkSize={10} sparkRadius={15} sparkCount={8} duration={400}>
+          {children}
+        </ClickSpark>
+        <Analytics />
       </body>
     </html>
   );

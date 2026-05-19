@@ -1,0 +1,424 @@
+/* ══════════════════════════════════════
+   Header — fixed site navigation
+   ══════════════════════════════════════ */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: 100px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem 0 2.5rem;
+  transform: translateY(0);
+  transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              opacity 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 1;
+  will-change: transform, opacity;
+}
+
+.headerHidden {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+/* ── Logo ── */
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.logoImg {
+  display: block;
+  height: 90px;
+  width: auto;
+  filter: brightness(0) invert(var(--logo-invert, 1));
+}
+
+/* ── Desktop nav ── */
+.nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background-color: rgba(0, 0, 0, 0.75);
+  padding: 0.25rem 0.25rem 0.25rem 1.5rem;
+  border-radius: 8px;
+}
+
+.navLink {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.navLink:hover {
+  color: #ffffff;
+}
+
+/* ── Case Studies dropdown ── */
+.dropdownWrapper {
+  position: static;
+  display: flex;
+  align-items: center;
+}
+
+.dropdownTrigger {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.chevron {
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.chevronUp {
+  transform: rotate(180deg);
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 200;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transform-origin: top center;
+  animation: dropdownIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.dropdownOut {
+  animation: dropdownOut 0.2s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+@keyframes dropdownIn {
+  0%   { opacity: 0; transform: translateY(-10px) scale(0.95); }
+  60%  { opacity: 1; transform: translateY(2px) scale(1.01); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes dropdownOut {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-8px) scale(0.96); }
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.75rem 0.875rem;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(0, 0, 0, 0.75);
+  text-decoration: none;
+  transition: background 0.35s ease, color 0.35s ease;
+  opacity: 0;
+  animation: itemIn 0.5s ease forwards;
+  border-radius: 8px;
+}
+
+.dropdownThumb {
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+  transition: background 0.35s ease;
+}
+
+.dropdownLabel {
+  flex: 1;
+  min-width: 0;
+}
+
+.dropdownItem:nth-child(1) { animation-delay: 0.05s; }
+.dropdownItem:nth-child(2) { animation-delay: 0.10s; }
+.dropdownItem:nth-child(3) { animation-delay: 0.15s; }
+.dropdownItem:nth-child(4) { animation-delay: 0.20s; }
+
+.dropdownOut .dropdownItem {
+  animation: none;
+}
+
+@keyframes itemIn {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.dropdownItem:not(:last-child) {
+  border-bottom: none;
+}
+
+.dropdownItem:hover {
+  background: #ffffff;
+  color: #000000;
+}
+
+.dropdownItem:hover .dropdownThumb {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.dropdownItem:hover svg {
+  stroke: #000000;
+}
+
+.navCta {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 1);
+  background-color: #ffffff;
+  text-decoration: none;
+  padding: 0.5rem 1.25rem;
+  white-space: nowrap;
+  transition: background 0.3s, color 0.3s;
+  border-radius: 4px;
+}
+
+.navCta:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #ffffff;
+}
+
+/* ── Hamburger ── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--header-fg, #ffffff);
+  transition: transform 0.25s ease, opacity 0.2s ease;
+  transform-origin: center;
+}
+
+.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ── Mobile fullscreen menu ── */
+.mobileMenu {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: rgba(8, 8, 8, 0.975);
+  display: none;                   /* hidden on desktop */
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 8rem 1.75rem 3rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  visibility: hidden;              /* GSAP autoAlpha manages this on mobile */
+  opacity: 0;
+}
+
+/* Mobile nav card — mirrors desktop dropdown item */
+.mobileNavCard {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.875rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.05);
+  text-decoration: none;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: background 0.35s ease, color 0.35s ease;
+}
+
+.mobileNavCard:hover {
+  background: #ffffff;
+  color: #000000;
+}
+
+.mobileNavCardThumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+  transition: background 0.35s ease;
+}
+
+.mobileNavCard:hover .mobileNavCardThumb {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.mobileNavCardLabel {
+  flex: 1;
+  min-width: 0;
+}
+
+.mobileNavCard:hover svg {
+  stroke: #000000;
+}
+
+/* Case Studies chevron */
+.mobileChevron {
+  opacity: 0.7;
+  flex-shrink: 0;
+  transform: rotate(-90deg);
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.mobileChevronOpen {
+  transform: rotate(0deg);
+}
+
+/* Case Studies sub-items */
+.mobileCaseStudiesItems {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mobileNavSubCard {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.8rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.03);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 0.35s ease, color 0.35s ease;
+}
+
+.mobileNavSubCard .mobileNavCardThumb {
+  width: 36px;
+  height: 36px;
+}
+
+.mobileNavSubCard:hover {
+  background: #ffffff;
+  color: #000000;
+}
+
+.mobileNavSubCard:hover .mobileNavCardThumb {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.mobileNavSubCard:hover svg {
+  stroke: #000000;
+}
+
+/* Full-width CTA */
+.mobileNavCta {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #000000;
+  background: #ffffff;
+  text-decoration: none;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  white-space: nowrap;
+  transition: background 0.3s, color 0.3s;
+}
+
+.mobileNavCta:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+/* ══════════════════════════════════════
+   Responsive
+   ══════════════════════════════════════ */
+
+@media (max-width: 900px) {
+  .nav {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .mobileMenu {
+    display: flex;
+  }
+
+  .header {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 0 1.25rem;
+  }
+
+  .mobileMenu {
+    padding: 6.5rem 1.25rem 2.5rem;
+  }
+}

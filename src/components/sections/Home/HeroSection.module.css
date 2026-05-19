@@ -1,0 +1,212 @@
+/* ══════════════════════════════════════
+   HeroSection — full-viewport hero
+   ══════════════════════════════════════ */
+
+/* ── Hero wrapper ── */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  min-height: 100svh;
+  background: #ffffff;
+  overflow: hidden;
+  color: #ffffff;
+}
+
+/* ── Background video ── */
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bgMedia {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0.01) 40%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+}
+
+/* ── Headline (bottom-left) ── */
+.headlineBlock {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  z-index: 10;
+}
+
+.headline {
+  font-family: var(--font-heading);
+  font-size: 5rem;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .headline {
+    font-size: 4rem;
+  }
+}
+
+.trademark {
+  font-size: 0.35em;
+  font-weight: 400;
+  vertical-align: super;
+  letter-spacing: 0;
+  opacity: 0.75;
+}
+
+/* ── Descriptor (right-middle) ── */
+.descriptorBlock {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  max-width: 400px;
+  text-align: left;
+}
+
+.descriptorTitle {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #ffffff;
+}
+
+.descriptorSub {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ── Explore More link-button (bottom-right) ── */
+.exploreBtn {
+  position: absolute;
+  bottom: 2rem;
+  right: 1rem;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #ffffff;
+  padding: 0;
+  text-decoration: none;
+  margin-right: 2rem;
+}
+
+.exploreBtnLabel {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  transition: opacity 0.2s;
+  color: #ffffff;
+}
+
+/* Arrow pill — shrinks inward on hover */
+.exploreArrowWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  overflow: hidden;
+  transition: width 0.25s ease, margin-left 0.25s ease;
+  flex-shrink: 0;
+  transform: translateY(1px);
+}
+
+.exploreBtn:hover .exploreBtnLabel {
+  opacity: 0.8;
+}
+
+.exploreArrow {
+  transition: transform 0.25s ease, opacity 0.2s;
+  flex-shrink: 0;
+}
+
+.exploreBtn:hover .exploreArrow {
+  transform: translateY(1px);
+  opacity: 0.8;
+}
+
+/* ══════════════════════════════════════
+   Responsive
+   ══════════════════════════════════════ */
+
+/* ── 1024px: tighten descriptor so it never touches the edge ── */
+@media (max-width: 1024px) {
+  .headlineBlock {
+    bottom: 2.75rem;
+    left: 2rem;
+  }
+
+  .descriptorBlock {
+    right: 1.5rem;
+    max-width: 220px;
+  }
+
+  .exploreBtn {
+    bottom: 2.75rem;
+    right: 2rem;
+  }
+}
+
+/* ── 900px: switch to stacked mobile layout ── */
+@media (max-width: 900px) {
+  .headlineBlock {
+    bottom: 7rem;
+    left: 1.5rem;
+  }
+
+  .descriptorBlock {
+    position: absolute;
+    top: auto;
+    bottom: 2.5rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    transform: none;
+    max-width: 100%;
+  }
+
+  .exploreBtn {
+    display: none;
+  }
+}
+
+/* ── 480px: small mobile ── */
+@media (max-width: 480px) {
+  .headlineBlock {
+    bottom: 8.5rem;
+    left: 1.25rem;
+  }
+
+  .descriptorBlock {
+    bottom: 2rem;
+    left: 1.25rem;
+    right: 1.25rem;
+  }
+}
+
